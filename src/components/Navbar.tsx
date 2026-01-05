@@ -4,7 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from './LanguageSwitcher';
-import MoroccoTime from './MoroccoTime';
+import CompactTime from './CompactTime';
 import UserMenu from './UserMenu';
 import NotificationBell from './NotificationBell';
 import SoundControls from './SoundControls';
@@ -144,7 +144,7 @@ const Navbar = () => {
           {/* Right side */}
           <div className="flex items-center gap-2">
             <div className="hidden lg:block">
-              <MoroccoTime />
+              <CompactTime />
             </div>
             {user && <NotificationBell />}
             <SoundControls />
@@ -168,7 +168,7 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden py-4 border-t border-primary/20 animate-fade-up">
             <div className="mb-4">
-              <MoroccoTime />
+              <CompactTime />
             </div>
             
             {isHomePage && homeNavItems.map((item, index) => (

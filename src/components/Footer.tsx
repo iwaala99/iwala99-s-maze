@@ -1,6 +1,6 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Shield, Terminal, MessageCircle } from 'lucide-react';
-import MoroccoTime from './MoroccoTime';
+import WorldClock from './WorldClock';
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -52,8 +52,8 @@ const Footer = () => {
           </div>
 
           {/* Time & Social */}
-          <div className="space-y-6">
-            <MoroccoTime />
+          <div className="space-y-6 md:col-span-3 lg:col-span-1">
+            <WorldClock />
             
             <div className="flex gap-4">
               <a
