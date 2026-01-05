@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import MatrixRain from '@/components/MatrixRain';
 import HeroSection from '@/components/HeroSection';
+import SecurityBanner from '@/components/SecurityBanner';
 import CyberRoles from '@/components/CyberRoles';
 import CommunitySection from '@/components/CommunitySection';
 import ResourcesSection from '@/components/ResourcesSection';
@@ -23,6 +24,7 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <SecurityBanner />
         <CyberRoles />
         <CommunitySection />
         <ResourcesSection />
