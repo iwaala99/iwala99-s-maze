@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import MoroccoTime from './MoroccoTime';
+import UserMenu from './UserMenu';
 import { Menu, X, Shield, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -59,6 +60,7 @@ const Navbar = () => {
             <div className="hidden lg:block">
               <MoroccoTime />
             </div>
+            <UserMenu />
             <LanguageSwitcher />
             
             {/* Mobile menu button */}
