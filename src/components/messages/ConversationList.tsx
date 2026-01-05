@@ -9,9 +9,16 @@ interface ConversationListProps {
   selectedId: string | null;
   onSelect: (id: string) => void;
   loading: boolean;
+  unreadByConversation?: Record<string, number>;
 }
 
-const ConversationList = ({ conversations, selectedId, onSelect, loading }: ConversationListProps) => {
+const ConversationList = ({ 
+  conversations, 
+  selectedId, 
+  onSelect, 
+  loading,
+  unreadByConversation = {}
+}: ConversationListProps) => {
   const { user } = useAuth();
 
   const getOtherParticipant = (conv: Conversation) => {
@@ -40,35 +47,49 @@ const ConversationList = ({ conversations, selectedId, onSelect, loading }: Conv
   return (
     <ScrollArea className="h-full">
       <div className="space-y-1 p-2">
-        {conversations.map((conv) => (
-          <button
-            key={conv.id}
-            onClick={() => onSelect(conv.id)}
-            className={`w-full flex items-start gap-3 p-3 rounded-lg transition-all ${
-              selectedId === conv.id
-                ? 'bg-primary/20 border border-primary/50'
-                : 'hover:bg-muted/50 border border-transparent'
-            }`}
-          >
-            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-              <User className="w-5 h-5 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0 text-left">
-              <p className="font-medium text-foreground truncate">
-                {getOtherParticipant(conv)}
-              </p>
-              {conv.last_message && (
-                <p className="text-sm text-muted-foreground truncate">
-                  {conv.last_message.sender_id === user?.id ? 'You: ' : ''}
-                  {conv.last_message.content}
+        {conversations.map((conv) => {
+          const unreadCount = unreadByConversation[conv.id] || 0;
+          
+          return (
+            <button
+              key={conv.id}
+              onClick={() => onSelect(conv.id)}
+              className={`w-full flex items-start gap-3 p-3 rounded-lg transition-all ${
+                selectedId === conv.id
+                  ? 'bg-primary/20 border border-primary/50'
+                  : 'hover:bg-muted/50 border border-transparent'
+              }`}
+            >
+              <div className="relative w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                <User className="w-5 h-5 text-primary" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-secondary text-secondary-foreground text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </div>
+              <div className="flex-1 min-w-0 text-left">
+                <div className="flex items-center justify-between gap-2">
+                  <p className={`font-medium truncate ${unreadCount > 0 ? 'text-primary' : 'text-foreground'}`}>
+                    {getOtherParticipant(conv)}
+                  </p>
+                  {unreadCount > 0 && (
+                    <span className="w-2 h-2 bg-secondary rounded-full flex-shrink-0" />
+                  )}
+                </div>
+                {conv.last_message && (
+                  <p className={`text-sm truncate ${unreadCount > 0 ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                    {conv.last_message.sender_id === user?.id ? 'You: ' : ''}
+                    {conv.last_message.content}
+                  </p>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formatDistanceToNow(new Date(conv.updated_at), { addSuffix: true })}
                 </p>
-              )}
-              <p className="text-xs text-muted-foreground mt-1">
-                {formatDistanceToNow(new Date(conv.updated_at), { addSuffix: true })}
-              </p>
-            </div>
-          </button>
-        ))}
+              </div>
+            </button>
+          );
+        })}
       </div>
     </ScrollArea>
   );

@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useConversations, useMessages, Conversation } from '@/hooks/useMessages';
+import { useConversations, useMessages } from '@/hooks/useMessages';
+import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 import ConversationList from '@/components/messages/ConversationList';
 import MessageThread from '@/components/messages/MessageThread';
 import UserSearch from '@/components/messages/UserSearch';
@@ -16,6 +17,7 @@ const Messages = () => {
   const { conversations, loading: convLoading, refetch } = useConversations();
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const { messages, loading: msgLoading, sendMessage } = useMessages(selectedConversation);
+  const { unreadByConversation, markAsRead, refetch: refetchUnread } = useUnreadMessages();
   const [showMobileThread, setShowMobileThread] = useState(false);
 
   useEffect(() => {
@@ -34,6 +36,12 @@ const Messages = () => {
     setSelectedConversation(conversationId);
     setShowMobileThread(true);
   };
+
+  const handleMessagesViewed = useCallback(() => {
+    if (selectedConversation) {
+      markAsRead(selectedConversation);
+    }
+  }, [selectedConversation, markAsRead]);
 
   const getOtherUsername = () => {
     const conv = conversations.find(c => c.id === selectedConversation);
@@ -73,6 +81,7 @@ const Messages = () => {
                   selectedId={selectedConversation}
                   onSelect={handleSelectConversation}
                   loading={convLoading}
+                  unreadByConversation={unreadByConversation}
                 />
               </div>
             </div>
@@ -97,6 +106,8 @@ const Messages = () => {
                       loading={msgLoading}
                       onSendMessage={sendMessage}
                       otherUsername={getOtherUsername()}
+                      conversationId={selectedConversation}
+                      onMessagesViewed={handleMessagesViewed}
                     />
                   </div>
                 </>

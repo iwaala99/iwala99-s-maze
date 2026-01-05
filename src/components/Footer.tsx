@@ -1,17 +1,9 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Shield, Terminal, Github, Twitter, Linkedin, Mail, MessageCircle } from 'lucide-react';
+import { Shield, Terminal, MessageCircle } from 'lucide-react';
 import MoroccoTime from './MoroccoTime';
 
 const Footer = () => {
   const { t } = useLanguage();
-
-  const socialLinks = [
-    { icon: MessageCircle, href: 'https://discord.gg/Rw2nYydFwJ', label: 'Discord' },
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Mail, href: '#', label: 'Email' },
-  ];
 
   return (
     <footer id="about" className="relative py-16 border-t border-primary/20">
@@ -64,21 +56,16 @@ const Footer = () => {
             <MoroccoTime />
             
             <div className="flex gap-4">
-              {socialLinks.map((link, index) => {
-                const Icon = link.icon;
-                return (
-                  <a
-                    key={index}
-                    href={link.href}
-                    target={link.href.startsWith('http') ? '_blank' : undefined}
-                    rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    aria-label={link.label}
-                    className="p-2 terminal-border text-muted-foreground hover:text-primary hover:glow-box transition-all duration-300"
-                  >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                );
-              })}
+              <a
+                href="https://discord.gg/Rw2nYydFwJ"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Discord"
+                className="flex items-center gap-2 p-3 terminal-border text-muted-foreground hover:text-primary hover:glow-box transition-all duration-300"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-sm font-medium">Join Discord</span>
+              </a>
             </div>
           </div>
         </div>
