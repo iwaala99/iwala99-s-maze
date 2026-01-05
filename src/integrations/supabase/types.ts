@@ -14,7 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["cyber_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["cyber_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["cyber_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +72,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      cyber_role:
+        | "ethical_hacker"
+        | "soc_analyst"
+        | "penetration_tester"
+        | "security_engineer"
+        | "threat_hunter"
+        | "incident_responder"
+        | "security_architect"
+        | "malware_analyst"
+        | "network_security"
+        | "digital_forensics"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +209,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      cyber_role: [
+        "ethical_hacker",
+        "soc_analyst",
+        "penetration_tester",
+        "security_engineer",
+        "threat_hunter",
+        "incident_responder",
+        "security_architect",
+        "malware_analyst",
+        "network_security",
+        "digital_forensics",
+      ],
+    },
   },
 } as const

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Users, Globe, Zap, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,7 @@ const stats = [
 
 const CommunitySection = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
 
   const getLabel = (stat: typeof stats[0]) => {
     if (language === 'ar') return stat.labelAr;
@@ -83,6 +85,7 @@ const CommunitySection = () => {
         <div className="text-center animate-fade-up" style={{ animationDelay: '0.4s' }}>
           <Button
             size="lg"
+            onClick={() => navigate('/auth')}
             className="glow-box bg-primary text-primary-foreground hover:bg-primary/90 font-display text-lg px-12 py-6"
           >
             {t('hero.join')}
