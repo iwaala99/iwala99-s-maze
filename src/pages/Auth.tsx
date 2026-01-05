@@ -206,28 +206,32 @@ const Auth = () => {
               <div className="space-y-3">
                 <Label className="text-muted-foreground">Select your role(s)</Label>
                 <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2">
-                  {cyberRoles.map((role) => (
-                    <div
-                      key={role.value}
-                      className={`
-                        flex items-center gap-2 p-2 rounded-md cursor-pointer transition-all duration-300
-                        ${selectedRoles.includes(role.value)
-                          ? 'bg-primary/20 border border-primary/50'
-                          : 'bg-muted/30 border border-transparent hover:border-primary/30'
-                        }
-                      `}
-                      onClick={() => handleRoleToggle(role.value)}
-                    >
-                      <Checkbox
-                        checked={selectedRoles.includes(role.value)}
-                        onCheckedChange={() => handleRoleToggle(role.value)}
-                        className="border-primary/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                      />
-                      <span className="text-xs text-muted-foreground">
-                        {role.label}
-                      </span>
-                    </div>
-                  ))}
+                  {cyberRoles.map((role) => {
+                    const isSelected = selectedRoles.includes(role.value);
+                    return (
+                      <label
+                        key={role.value}
+                        htmlFor={`role-${role.value}`}
+                        className={`
+                          flex items-center gap-2 p-2 rounded-md cursor-pointer transition-all duration-300
+                          ${isSelected
+                            ? 'bg-primary/20 border border-primary/50'
+                            : 'bg-muted/30 border border-transparent hover:border-primary/30'
+                          }
+                        `}
+                      >
+                        <Checkbox
+                          id={`role-${role.value}`}
+                          checked={isSelected}
+                          onCheckedChange={() => handleRoleToggle(role.value)}
+                          className="border-primary/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary pointer-events-none"
+                        />
+                        <span className="text-xs text-muted-foreground">
+                          {role.label}
+                        </span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
             )}
