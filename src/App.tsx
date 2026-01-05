@@ -12,6 +12,7 @@ import Auth from "./pages/Auth";
 import Feed from "./pages/Feed";
 import Messages from "./pages/Messages";
 import CTF from "./pages/CTF";
+import Recruitment from "./pages/Recruitment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ function App() {
                   <Route path="/feed" element={<Feed />} />
                   <Route path="/messages" element={<Messages />} />
                   <Route path="/ctf" element={<CTF />} />
+                  <Route path="/r3cru1t" element={<Recruitment />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
