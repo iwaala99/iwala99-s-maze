@@ -13,6 +13,7 @@ import Feed from "./pages/Feed";
 import Messages from "./pages/Messages";
 import Puzzles from "./pages/Puzzles";
 import Recruitment from "./pages/Recruitment";
+import OmegaRecruitment from "./pages/OmegaRecruitment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ function App() {
                   <Route path="/messages" element={<Messages />} />
                   <Route path="/puzzles" element={<Puzzles />} />
                   <Route path="/r3cru1t" element={<Recruitment />} />
+                  <Route path="/0m3g4" element={<OmegaRecruitment />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
