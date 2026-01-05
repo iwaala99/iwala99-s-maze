@@ -23,8 +23,8 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const scrollToRoles = () => {
-    const element = document.querySelector('#roles');
+  const scrollToMaze = () => {
+    const element = document.querySelector('#maze');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -86,24 +86,24 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up" style={{ animationDelay: '0.3s' }}>
           <Button
             size="lg"
-            onClick={() => navigate('/auth')}
+            onClick={scrollToMaze}
             className="glow-box bg-primary text-primary-foreground hover:bg-primary/90 font-display text-lg px-8 py-6 group"
           >
-            <span className="group-hover:animate-glitch">{t('hero.join')}</span>
+            <span className="group-hover:animate-glitch">Enter the Maze</span>
           </Button>
           
           <Button
             size="lg"
             variant="outline"
-            onClick={scrollToRoles}
+            onClick={() => navigate('/auth')}
             className="border-secondary text-secondary hover:bg-secondary/10 font-display text-lg px-8 py-6"
           >
-            {t('hero.explore')}
+            {t('hero.join')}
           </Button>
         </div>
 
         {/* Scroll indicator */}
-        <div className="animate-bounce cursor-pointer" onClick={scrollToRoles}>
+        <div className="animate-bounce cursor-pointer" onClick={scrollToMaze}>
           <ChevronDown className="w-8 h-8 text-primary mx-auto" />
         </div>
       </div>
