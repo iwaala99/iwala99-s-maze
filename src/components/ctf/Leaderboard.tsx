@@ -1,28 +1,23 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Trophy, Medal, Award } from 'lucide-react';
 import { useLeaderboard } from '@/hooks/useCTF';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const rankIcons = [
-  <Trophy key="1" className="h-5 w-5 text-yellow-400" />,
-  <Medal key="2" className="h-5 w-5 text-gray-400" />,
-  <Award key="3" className="h-5 w-5 text-amber-600" />,
-];
+const rankGlyphs = ['⬡', '⬢', '⬣'];
 
 export function Leaderboard() {
   const { leaderboard, loading } = useLeaderboard();
 
   if (loading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-mono">
-            <Trophy className="h-5 w-5 text-primary" />
-            Leaderboard
+      <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
+            <span className="text-primary">◬</span>
+            CIPHER_BREAKERS
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-2">
           {[...Array(5)].map((_, i) => (
             <Skeleton key={i} className="h-12 w-full" />
           ))}
@@ -33,16 +28,16 @@ export function Leaderboard() {
 
   if (leaderboard.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-mono">
-            <Trophy className="h-5 w-5 text-primary" />
-            Leaderboard
+      <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
+            <span className="text-primary">◬</span>
+            CIPHER_BREAKERS
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground text-center py-8">
-            No solves yet. Be the first!
+          <p className="text-xs text-muted-foreground text-center py-8 font-mono">
+            // AWAITING_FIRST_SOLVER
           </p>
         </CardContent>
       </Card>
@@ -50,41 +45,47 @@ export function Leaderboard() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 font-mono">
-          <Trophy className="h-5 w-5 text-primary" />
-          Leaderboard
+    <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
+          <span className="text-primary">◬</span>
+          CIPHER_BREAKERS
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-1">
         {leaderboard.map((entry, index) => (
           <div
             key={entry.user_id}
-            className={`flex items-center gap-3 p-3 rounded-md transition-colors ${
-              index < 3 ? 'bg-primary/5 border border-primary/20' : 'bg-muted/30'
+            className={`flex items-center gap-3 p-3 rounded transition-colors ${
+              index < 3 
+                ? 'bg-primary/5 border border-primary/10' 
+                : 'hover:bg-muted/30'
             }`}
           >
-            <div className="w-8 flex justify-center">
+            <div className="w-6 flex justify-center">
               {index < 3 ? (
-                rankIcons[index]
+                <span className={`font-mono ${
+                  index === 0 ? 'text-yellow-400' : 
+                  index === 1 ? 'text-gray-400' : 'text-amber-600'
+                }`}>
+                  {rankGlyphs[index]}
+                </span>
               ) : (
-                <span className="text-sm font-mono text-muted-foreground">
-                  #{index + 1}
+                <span className="text-[10px] font-mono text-muted-foreground">
+                  {String(index + 1).padStart(2, '0')}
                 </span>
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-mono text-sm truncate">{entry.username}</p>
-              <p className="text-xs text-muted-foreground">
-                {entry.solved_count} challenge{entry.solved_count !== 1 ? 's' : ''} solved
+              <p className="font-mono text-xs truncate">{entry.username}</p>
+              <p className="text-[10px] text-muted-foreground font-mono">
+                {entry.solved_count} enigma{entry.solved_count !== 1 ? 's' : ''}
               </p>
             </div>
             <div className="text-right">
-              <p className="font-mono text-sm font-bold text-primary">
+              <p className="font-mono text-xs font-bold text-primary">
                 {entry.total_points}
               </p>
-              <p className="text-xs text-muted-foreground">points</p>
             </div>
           </div>
         ))}
