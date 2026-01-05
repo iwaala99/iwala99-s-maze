@@ -2,10 +2,13 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useUnreadMessages } from '@/hooks/useUnreadMessages';
+import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import MoroccoTime from './MoroccoTime';
 import UserMenu from './UserMenu';
-import { Menu, X, Shield, Terminal, MessageSquare, Mail, Brain } from 'lucide-react';
+import NotificationBell from './NotificationBell';
+import SoundControls from './SoundControls';
+import { Menu, X, Shield, Terminal, MessageSquare, Mail, Brain, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
@@ -14,6 +17,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { unreadCount } = useUnreadMessages();
+  const { user } = useAuth();
 
   const isHomePage = location.pathname === '/';
 
@@ -119,13 +123,30 @@ const Navbar = () => {
                 location.pathname === '/messages' ? 'w-full' : 'w-0 group-hover:w-full'
               }`} />
             </button>
+
+            {user && (
+              <button
+                onClick={() => navigate('/profile')}
+                className={`flex items-center gap-2 transition-colors duration-300 relative group ${
+                  location.pathname.startsWith('/profile') ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                }`}
+              >
+                <User className="w-4 h-4" />
+                <span>Profile</span>
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
+                  location.pathname.startsWith('/profile') ? 'w-full' : 'w-0 group-hover:w-full'
+                }`} />
+              </button>
+            )}
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <div className="hidden lg:block">
               <MoroccoTime />
             </div>
+            {user && <NotificationBell />}
+            <SoundControls />
             <UserMenu />
             <LanguageSwitcher />
             
@@ -204,6 +225,21 @@ const Navbar = () => {
               </div>
               <span>Messages</span>
             </button>
+
+            {user && (
+              <button
+                onClick={() => {
+                  navigate('/profile');
+                  setIsOpen(false);
+                }}
+                className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-300 ${
+                  location.pathname.startsWith('/profile') ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                }`}
+              >
+                <User className="w-4 h-4" />
+                <span>Profile</span>
+              </button>
+            )}
           </div>
         )}
       </div>
