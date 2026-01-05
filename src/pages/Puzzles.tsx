@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import puzzlesBg from '@/assets/puzzles-bg.png';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -61,10 +62,13 @@ export default function Puzzles() {
       </Helmet>
 
       <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
-        {/* Background effects */}
-        <div className="fixed inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
-        </div>
+        {/* Background image */}
+        <div 
+          className="fixed inset-0 pointer-events-none bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${puzzlesBg})` }}
+        />
+        {/* Overlay for better readability */}
+        <div className="fixed inset-0 pointer-events-none bg-background/80" />
 
         <Navbar />
 
