@@ -4,15 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Shield, Terminal, ChevronDown, Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+// Professional, cryptic slogans
 const slogans = [
-  "// We see everything. We protect everyone.",
-  "// In the shadows, we defend the light.",
-  "// Your firewall has a firewall. It's us.",
-  "// 0 days to find. 0 days to fear.",
-  "// We hack the hackers before they hack you.",
-  "// Encrypted minds. Unbreakable bonds.",
-  "// root@iwala99:~# protecting_the_digital_realm",
-  "// sudo make world --secure",
+  "// We seek highly intelligent individuals.",
+  "// 3301 was just the beginning.",
+  "// Prove your worth. Find the path.",
+  "// The maze has many entrances.",
+  "// Only the exceptional will find what lies within.",
+  "// root@iwala99:~# ./recruit --elite",
 ];
 
 const HeroSection = () => {

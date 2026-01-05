@@ -1,44 +1,47 @@
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Users, Globe, Zap, Award } from 'lucide-react';
+import { useRealStats } from '@/hooks/useRealStats';
+import { Users, Brain, Target, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const stats = [
-  { 
-    icon: Users, 
-    valueKey: '10K+',
-    labelEn: 'Security Professionals',
-    labelAr: 'محترف أمني',
-    labelDarija: 'محترف سيكيوريتي',
-  },
-  { 
-    icon: Globe, 
-    valueKey: '50+',
-    labelEn: 'Countries',
-    labelAr: 'دولة',
-    labelDarija: 'بلاد',
-  },
-  { 
-    icon: Zap, 
-    valueKey: '1000+',
-    labelEn: 'Daily Discussions',
-    labelAr: 'نقاش يومي',
-    labelDarija: 'نقاش كل يوم',
-  },
-  { 
-    icon: Award, 
-    valueKey: '500+',
-    labelEn: 'Certifications Shared',
-    labelAr: 'شهادة مشتركة',
-    labelDarija: 'شهادة متشاركة',
-  },
-];
+import { Skeleton } from '@/components/ui/skeleton';
 
 const CommunitySection = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
+  const stats = useRealStats();
 
-  const getLabel = (stat: typeof stats[0]) => {
+  const statsConfig = [
+    { 
+      icon: Users, 
+      getValue: () => stats.totalUsers,
+      labelEn: 'Operatives',
+      labelAr: 'العملاء',
+      labelDarija: 'العملاء',
+    },
+    { 
+      icon: Brain, 
+      getValue: () => stats.totalChallenges,
+      labelEn: 'Active Puzzles',
+      labelAr: 'الألغاز النشطة',
+      labelDarija: 'الألغاز النشطة',
+    },
+    { 
+      icon: Target, 
+      getValue: () => stats.totalSolved,
+      labelEn: 'Puzzles Solved',
+      labelAr: 'الألغاز المحلولة',
+      labelDarija: 'الألغاز المحلولة',
+    },
+    { 
+      icon: Zap, 
+      getValue: () => stats.activeChallenges,
+      labelEn: 'Live Challenges',
+      labelAr: 'التحديات الحية',
+      labelDarija: 'التحديات الحية',
+    },
+  ];
+
+  const getLabel = (stat: typeof statsConfig[0]) => {
     if (language === 'ar') return stat.labelAr;
     if (language === 'darija') return stat.labelDarija;
     return stat.labelEn;
@@ -59,21 +62,26 @@ const CommunitySection = () => {
           </p>
         </div>
 
-        {/* Stats grid */}
+        {/* Stats grid - Real data */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-          {stats.map((stat, index) => {
+          {statsConfig.map((stat, index) => {
             const Icon = stat.icon;
+            const value = stat.getValue();
             return (
               <div
                 key={index}
                 className="terminal-border bg-card/50 backdrop-blur-sm p-6 rounded-lg text-center hover:glow-box transition-all duration-500 animate-fade-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <Icon className="w-8 h-8 text-primary mx-auto mb-3 animate-glow-pulse" />
-                <div className="font-display text-3xl md:text-4xl font-bold text-primary mb-2">
-                  {stat.valueKey}
+                <Icon className="w-8 h-8 text-primary mx-auto mb-3" />
+                <div className="font-display text-3xl md:text-4xl font-bold text-primary mb-2 font-mono">
+                  {stats.loading ? (
+                    <Skeleton className="h-10 w-16 mx-auto" />
+                  ) : (
+                    value
+                  )}
                 </div>
-                <div className="text-muted-foreground text-sm">
+                <div className="text-muted-foreground text-sm font-mono">
                   {getLabel(stat)}
                 </div>
               </div>
@@ -85,10 +93,10 @@ const CommunitySection = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '0.4s' }}>
           <Button
             size="lg"
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate('/puzzles')}
             className="glow-box bg-primary text-primary-foreground hover:bg-primary/90 font-display text-lg px-12 py-6"
           >
-            {t('hero.join')}
+            Enter The Maze
           </Button>
           
           <Button
@@ -99,6 +107,14 @@ const CommunitySection = () => {
           >
             View Feed
           </Button>
+        </div>
+
+        {/* Hidden clue for puzzle hunters */}
+        <div className="mt-16 text-center">
+          <p className="text-[10px] text-muted-foreground/30 font-mono select-none" data-clue="1">
+            {/* Base64: "The path begins where the matrix ends" */}
+            VGhlIHBhdGggYmVnaW5zIHdoZXJlIHRoZSBtYXRyaXggZW5kcw==
+          </p>
         </div>
       </div>
     </section>

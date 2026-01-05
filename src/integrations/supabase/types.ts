@@ -48,6 +48,13 @@ export type Database = {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -79,6 +86,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "conversations"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "conversation_participants_user_id_fkey"
@@ -161,6 +175,13 @@ export type Database = {
             foreignKeyName: "ctf_challenges_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "ctf_challenges_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -192,6 +213,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "ctf_challenges"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ctf_submissions_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "ctf_challenges_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ctf_submissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "ctf_submissions_user_id_fkey"
@@ -239,6 +274,13 @@ export type Database = {
             foreignKeyName: "messages_sender_id_fkey"
             columns: ["sender_id"]
             isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -280,6 +322,13 @@ export type Database = {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -311,6 +360,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "posts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "post_likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "post_likes_user_id_fkey"
@@ -353,6 +409,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
+          },
           {
             foreignKeyName: "posts_user_id_fkey"
             columns: ["user_id"]
@@ -422,6 +485,13 @@ export type Database = {
             foreignKeyName: "user_roles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -429,10 +499,95 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      ctf_challenges_public: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          difficulty: string | null
+          expires_at: string | null
+          hints: string[] | null
+          id: string | null
+          is_active: boolean | null
+          is_weekly: boolean | null
+          points: number | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty?: string | null
+          expires_at?: string | null
+          hints?: string[] | null
+          id?: string | null
+          is_active?: boolean | null
+          is_weekly?: boolean | null
+          points?: number | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty?: string | null
+          expires_at?: string | null
+          hints?: string[] | null
+          id?: string | null
+          is_active?: boolean | null
+          is_weekly?: boolean | null
+          points?: number | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ctf_challenges_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "leaderboard_public"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "ctf_challenges_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leaderboard_public: {
+        Row: {
+          solved_count: number | null
+          total_points: number | null
+          user_id: string | null
+          username: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      assign_user_role: {
+        Args: {
+          new_role: Database["public"]["Enums"]["cyber_role"]
+          target_user_id: string
+        }
+        Returns: undefined
+      }
+      get_challenge_solve_count: {
+        Args: { challenge_uuid: string }
+        Returns: number
+      }
+      verify_flag: {
+        Args: { challenge_id: string; submitted_flag: string }
+        Returns: boolean
+      }
     }
     Enums: {
       cyber_role:

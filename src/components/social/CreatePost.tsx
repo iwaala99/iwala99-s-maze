@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
 import {
   Select,
   SelectContent,
@@ -12,6 +13,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+
+const postSchema = z.object({
+  content: z.string()
+    .trim()
+    .min(1, 'Post cannot be empty')
+    .max(2000, 'Post must be less than 2000 characters')
+    .refine(val => !/<script/i.test(val), 'Invalid content'),
+  category: z.enum(['general', 'tools', 'ctf', 'news', 'jobs', 'learning', 'writeups']),
+});
 
 const categories = [
   { value: 'general', label: 'General Discussion' },
@@ -41,13 +51,9 @@ const CreatePost = ({ onPostCreated }: CreatePostProps) => {
       return;
     }
 
-    if (!content.trim()) {
-      toast.error('Post content cannot be empty');
-      return;
-    }
-
-    if (content.length > 2000) {
-      toast.error('Post must be less than 2000 characters');
+    const validation = postSchema.safeParse({ content, category });
+    if (!validation.success) {
+      toast.error(validation.error.errors[0].message);
       return;
     }
 

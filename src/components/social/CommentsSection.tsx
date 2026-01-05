@@ -6,6 +6,15 @@ import { Input } from '@/components/ui/input';
 import { Send, Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
+import { z } from 'zod';
+
+const commentSchema = z.object({
+  content: z.string()
+    .trim()
+    .min(1, 'Comment cannot be empty')
+    .max(500, 'Comment must be less than 500 characters')
+    .refine(val => !/<script/i.test(val), 'Invalid content'),
+});
 
 interface Comment {
   id: string;
@@ -65,10 +74,9 @@ const CommentsSection = ({ postId, onCommentAdded, onCommentDeleted }: CommentsS
       return;
     }
 
-    if (!newComment.trim()) return;
-
-    if (newComment.length > 500) {
-      toast.error('Comment must be less than 500 characters');
+    const validation = commentSchema.safeParse({ content: newComment });
+    if (!validation.success) {
+      toast.error(validation.error.errors[0].message);
       return;
     }
 
@@ -80,7 +88,7 @@ const CommentsSection = ({ postId, onCommentAdded, onCommentDeleted }: CommentsS
         .insert({
           post_id: postId,
           user_id: user.id,
-          content: newComment.trim(),
+          content: validation.data.content,
         })
         .select(`
           id,
