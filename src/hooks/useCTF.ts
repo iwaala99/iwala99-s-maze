@@ -36,12 +36,10 @@ export function useChallenges() {
   const fetchChallenges = async () => {
     setLoading(true);
     
-    // Fetch all challenges including boss (filter out expired ones)
+    // Fetch challenges from public view (excludes flag_hash for security)
     const { data: challengesData, error } = await supabase
-      .from('ctf_challenges')
+      .from('ctf_challenges_public')
       .select('*')
-      .eq('is_active', true)
-      .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
       .order('points', { ascending: true });
 
     if (error) {
@@ -54,11 +52,6 @@ export function useChallenges() {
     const regularChallenges = challengesData?.filter(c => c.difficulty !== 'boss') || [];
     const boss = challengesData?.find(c => c.difficulty === 'boss') || null;
 
-    // Fetch submission counts for each challenge
-    const { data: submissionCounts } = await supabase
-      .from('ctf_submissions')
-      .select('challenge_id');
-
     // Fetch user's solved challenges if logged in
     let userSolvedIds: string[] = [];
     if (user) {
@@ -70,17 +63,20 @@ export function useChallenges() {
       userSolvedIds = userSolved?.map(s => s.challenge_id) || [];
     }
 
-    // Count submissions per challenge
-    const countMap: Record<string, number> = {};
-    submissionCounts?.forEach(s => {
-      countMap[s.challenge_id] = (countMap[s.challenge_id] || 0) + 1;
-    });
-
-    const enrichedChallenges = regularChallenges.map(c => ({
-      ...c,
-      solved_count: countMap[c.id] || 0,
-      is_solved: userSolvedIds.includes(c.id)
-    }));
+    // Get solve counts using secure function
+    const enrichedChallenges = await Promise.all(
+      regularChallenges.map(async (c) => {
+        const { data: countData } = await supabase
+          .rpc('get_challenge_solve_count', { challenge_uuid: c.id });
+        
+        return {
+          ...c,
+          hints: c.hints || [],
+          solved_count: countData || 0,
+          is_solved: userSolvedIds.includes(c.id)
+        };
+      })
+    );
 
     // Check if user has completed all insane challenges
     const insaneChallenges = enrichedChallenges.filter(c => c.difficulty === 'insane');
@@ -91,9 +87,13 @@ export function useChallenges() {
 
     // Enrich boss puzzle if it exists
     if (boss) {
+      const { data: bossCount } = await supabase
+        .rpc('get_challenge_solve_count', { challenge_uuid: boss.id });
+      
       setBossPuzzle({
         ...boss,
-        solved_count: countMap[boss.id] || 0,
+        hints: boss.hints || [],
+        solved_count: bossCount || 0,
         is_solved: userSolvedIds.includes(boss.id)
       });
     }
@@ -122,14 +122,12 @@ export function useLeaderboard() {
   const fetchLeaderboard = async () => {
     setLoading(true);
 
-    // Get all submissions with challenge points
-    const { data: submissions, error } = await supabase
-      .from('ctf_submissions')
-      .select(`
-        user_id,
-        challenge_id,
-        ctf_challenges!inner(points)
-      `);
+    // Use secure public view for leaderboard
+    const { data, error } = await supabase
+      .from('leaderboard_public')
+      .select('*')
+      .order('total_points', { ascending: false })
+      .limit(20);
 
     if (error) {
       console.error('Error fetching leaderboard:', error);
@@ -137,44 +135,14 @@ export function useLeaderboard() {
       return;
     }
 
-    // Get all profiles
-    const { data: profiles } = await supabase
-      .from('profiles')
-      .select('id, username');
-
-    const profileMap: Record<string, string> = {};
-    profiles?.forEach(p => {
-      profileMap[p.id] = p.username;
-    });
-
-    // Aggregate points per user
-    const userStats: Record<string, { points: number; count: number }> = {};
-    submissions?.forEach((s: any) => {
-      if (!userStats[s.user_id]) {
-        userStats[s.user_id] = { points: 0, count: 0 };
-      }
-      userStats[s.user_id].points += s.ctf_challenges.points;
-      userStats[s.user_id].count += 1;
-    });
-
-    const leaderboardData: LeaderboardEntry[] = Object.entries(userStats)
-      .map(([user_id, stats]) => ({
-        user_id,
-        username: profileMap[user_id] || 'Unknown',
-        total_points: stats.points,
-        solved_count: stats.count
-      }))
-      .sort((a, b) => b.total_points - a.total_points)
-      .slice(0, 20);
-
-    setLeaderboard(leaderboardData);
+    setLeaderboard(data || []);
     setLoading(false);
   };
 
   useEffect(() => {
     fetchLeaderboard();
 
-    // Subscribe to realtime updates
+    // Subscribe to realtime updates on submissions
     const channel = supabase
       .channel('ctf-leaderboard')
       .on(
@@ -203,24 +171,21 @@ export function useSubmitFlag() {
 
     setSubmitting(true);
 
-    // Get the challenge to verify the flag
-    const { data: challenge, error: fetchError } = await supabase
-      .from('ctf_challenges')
-      .select('flag_hash')
-      .eq('id', challengeId)
-      .maybeSingle();
+    // Use secure server-side verification
+    const { data: isCorrect, error: verifyError } = await supabase
+      .rpc('verify_flag', { 
+        challenge_id: challengeId, 
+        submitted_flag: flag.trim().toLowerCase() 
+      });
 
-    if (fetchError || !challenge) {
+    if (verifyError) {
       setSubmitting(false);
-      return { success: false, message: 'Challenge not found' };
+      return { success: false, message: 'Verification failed' };
     }
-
-    // Simple hash comparison (in production, use proper hashing)
-    const flagHash = btoa(flag.trim().toLowerCase());
     
-    if (flagHash !== challenge.flag_hash) {
+    if (!isCorrect) {
       setSubmitting(false);
-      return { success: false, message: 'Incorrect flag. Try again!' };
+      return { success: false, message: 'Incorrect flag. Try again.' };
     }
 
     // Check if already solved
