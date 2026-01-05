@@ -107,6 +107,95 @@ export type Database = {
         }
         Relationships: []
       }
+      ctf_challenges: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string
+          difficulty: string
+          flag_hash: string
+          hints: string[] | null
+          id: string
+          is_active: boolean
+          points: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          difficulty?: string
+          flag_hash: string
+          hints?: string[] | null
+          id?: string
+          is_active?: boolean
+          points?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          difficulty?: string
+          flag_hash?: string
+          hints?: string[] | null
+          id?: string
+          is_active?: boolean
+          points?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ctf_challenges_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ctf_submissions: {
+        Row: {
+          challenge_id: string
+          id: string
+          solved_at: string
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          id?: string
+          solved_at?: string
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          id?: string
+          solved_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ctf_submissions_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "ctf_challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ctf_submissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
