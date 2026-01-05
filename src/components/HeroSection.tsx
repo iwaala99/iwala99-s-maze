@@ -4,22 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Shield, Terminal, ChevronDown, Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-// Professional, cryptic slogans
-const slogans = [
-  "// We seek highly intelligent individuals.",
-  "// 3301 was just the beginning.",
-  "// Prove your worth. Find the path.",
-  "// The maze has many entrances.",
-  "// Only the exceptional will find what lies within.",
-  "// root@iwala99:~# ./recruit --elite",
-];
-
 const HeroSection = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [typedText, setTypedText] = useState('');
-  const [currentSlogan, setCurrentSlogan] = useState(0);
-  const [sloganVisible, setSloganVisible] = useState(true);
   const fullText = 'IWALA99';
 
   useEffect(() => {
@@ -32,17 +20,6 @@ const HeroSection = () => {
         clearInterval(interval);
       }
     }, 150);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSloganVisible(false);
-      setTimeout(() => {
-        setCurrentSlogan((prev) => (prev + 1) % slogans.length);
-        setSloganVisible(true);
-      }, 500);
-    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -90,16 +67,12 @@ const HeroSection = () => {
             <span className="animate-blink text-primary">_</span>
           </h1>
 
-          {/* Hacker Slogan */}
+          {/* Scary Slogan */}
           <div className="h-12 flex items-center justify-center mb-4">
-            <div 
-              className={`flex items-center gap-2 transition-all duration-500 ${
-                sloganVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-              }`}
-            >
+            <div className="flex items-center gap-2">
               <Eye className="w-5 h-5 text-secondary animate-glow-pulse" />
-              <p className="font-mono text-sm md:text-lg text-secondary glow-text">
-                {slogans[currentSlogan]}
+              <p className="font-mono text-sm md:text-lg text-secondary">
+                // We are always watching.
               </p>
             </div>
           </div>

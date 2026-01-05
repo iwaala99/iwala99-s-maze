@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { SoundProvider } from "@/contexts/SoundContext";
@@ -23,32 +24,34 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <LanguageProvider>
-            <AuthProvider>
-              <SoundProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/auth" element={<Auth />} />
-                    <Route path="/feed" element={<Feed />} />
-                    <Route path="/messages" element={<Messages />} />
-                    <Route path="/puzzles" element={<Puzzles />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/profile/:userId" element={<Profile />} />
-                    <Route path="/r3cru1t" element={<Recruitment />} />
-                    <Route path="/0m3g4" element={<OmegaRecruitment />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </BrowserRouter>
-              </SoundProvider>
-            </AuthProvider>
-          </LanguageProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <LanguageProvider>
+              <AuthProvider>
+                <SoundProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/auth" element={<Auth />} />
+                      <Route path="/feed" element={<Feed />} />
+                      <Route path="/messages" element={<Messages />} />
+                      <Route path="/puzzles" element={<Puzzles />} />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/profile/:userId" element={<Profile />} />
+                      <Route path="/r3cru1t" element={<Recruitment />} />
+                      <Route path="/0m3g4" element={<OmegaRecruitment />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </BrowserRouter>
+                </SoundProvider>
+              </AuthProvider>
+            </LanguageProvider>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
     </HelmetProvider>
   );
 }

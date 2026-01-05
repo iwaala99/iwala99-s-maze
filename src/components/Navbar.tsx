@@ -8,6 +8,7 @@ import MoroccoTime from './MoroccoTime';
 import UserMenu from './UserMenu';
 import NotificationBell from './NotificationBell';
 import SoundControls from './SoundControls';
+import { ThemeToggle } from './ThemeToggle';
 import { Menu, X, Shield, Terminal, MessageSquare, Mail, Brain, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -147,6 +148,7 @@ const Navbar = () => {
             </div>
             {user && <NotificationBell />}
             <SoundControls />
+            <ThemeToggle />
             <UserMenu />
             <LanguageSwitcher />
             
