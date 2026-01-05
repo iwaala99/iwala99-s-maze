@@ -1,13 +1,26 @@
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { Shield, Terminal, ChevronDown } from 'lucide-react';
+import { Shield, Terminal, ChevronDown, Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+const slogans = [
+  "// We see everything. We protect everyone.",
+  "// In the shadows, we defend the light.",
+  "// Your firewall has a firewall. It's us.",
+  "// 0 days to find. 0 days to fear.",
+  "// We hack the hackers before they hack you.",
+  "// Encrypted minds. Unbreakable bonds.",
+  "// root@iwala99:~# protecting_the_digital_realm",
+  "// sudo make world --secure",
+];
 
 const HeroSection = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [typedText, setTypedText] = useState('');
+  const [currentSlogan, setCurrentSlogan] = useState(0);
+  const [sloganVisible, setSloganVisible] = useState(true);
   const fullText = 'IWALA99';
 
   useEffect(() => {
@@ -20,6 +33,17 @@ const HeroSection = () => {
         clearInterval(interval);
       }
     }, 150);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSloganVisible(false);
+      setTimeout(() => {
+        setCurrentSlogan((prev) => (prev + 1) % slogans.length);
+        setSloganVisible(true);
+      }, 500);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -60,12 +84,26 @@ const HeroSection = () => {
             {t('hero.welcome')}
           </p>
           
-          <h1 className="font-display text-5xl md:text-7xl lg:text-9xl font-black mb-6">
+          <h1 className="font-display text-5xl md:text-7xl lg:text-9xl font-black mb-4">
             <span className="text-gradient glow-text">
               {typedText}
             </span>
             <span className="animate-blink text-primary">_</span>
           </h1>
+
+          {/* Hacker Slogan */}
+          <div className="h-12 flex items-center justify-center mb-4">
+            <div 
+              className={`flex items-center gap-2 transition-all duration-500 ${
+                sloganVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+              }`}
+            >
+              <Eye className="w-5 h-5 text-secondary animate-glow-pulse" />
+              <p className="font-mono text-sm md:text-lg text-secondary glow-text">
+                {slogans[currentSlogan]}
+              </p>
+            </div>
+          </div>
           
           <p className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {t('hero.tagline')}
