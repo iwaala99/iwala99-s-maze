@@ -356,3 +356,191 @@
     opacity: 0.06;
   }
 }
+
+/* Celebration animations for solved puzzles */
+@keyframes celebration-bg {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes celebration-glow {
+  0% { transform: scale(0); opacity: 0; }
+  30% { transform: scale(1.2); opacity: 0.8; }
+  60% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes celebration-glow-delayed {
+  0%, 10% { transform: scale(0); opacity: 0; }
+  40% { transform: scale(1.3); opacity: 0.7; }
+  70% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+@keyframes ring-expand {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes ring-expand-delayed {
+  0%, 15% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(5); opacity: 0; }
+}
+
+@keyframes ring-expand-slow {
+  0%, 25% { transform: scale(0); opacity: 0.8; }
+  100% { transform: scale(6); opacity: 0; }
+}
+
+@keyframes particle-explode {
+  0% { 
+    transform: translate(-50%, -50%) rotate(0deg) translateY(0);
+    opacity: 1;
+  }
+  100% { 
+    transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateY(var(--particle-distance));
+    opacity: 0;
+  }
+}
+
+@keyframes celebration-reveal {
+  0% { 
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% { 
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes success-icon {
+  0% { transform: scale(0) rotate(-180deg); }
+  60% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+}
+
+@keyframes sparkle-delayed {
+  0%, 20%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+  60% { transform: scale(1.3) rotate(-180deg); opacity: 1; }
+}
+
+@keyframes text-reveal {
+  0% { 
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes text-reveal-delayed {
+  0%, 30% { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scan-line {
+  0% { top: -10%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 110%; opacity: 0; }
+}
+
+@keyframes corner-reveal {
+  0% { opacity: 0; transform: translate(-10px, -10px); }
+  100% { opacity: 1; transform: translate(0, 0); }
+}
+
+@keyframes corner-reveal-delayed {
+  0%, 20% { opacity: 0; transform: translate(10px, -10px); }
+  100% { opacity: 1; transform: translate(0, 0); }
+}
+
+.animate-celebration-bg {
+  animation: celebration-bg 2.5s ease-out forwards;
+}
+
+.animate-celebration-glow {
+  animation: celebration-glow 2s ease-out forwards;
+}
+
+.animate-celebration-glow-delayed {
+  animation: celebration-glow-delayed 2.2s ease-out forwards;
+}
+
+.animate-ring-expand {
+  animation: ring-expand 1.5s ease-out forwards;
+}
+
+.animate-ring-expand-delayed {
+  animation: ring-expand-delayed 1.8s ease-out forwards;
+}
+
+.animate-ring-expand-slow {
+  animation: ring-expand-slow 2.2s ease-out forwards;
+}
+
+.animate-particle-explode {
+  animation: particle-explode 1s ease-out forwards;
+}
+
+.animate-celebration-reveal {
+  animation: celebration-reveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-success-icon {
+  animation: success-icon 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-sparkle {
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.animate-sparkle-delayed {
+  animation: sparkle-delayed 1.5s ease-in-out infinite 0.3s;
+}
+
+.animate-text-reveal {
+  animation: text-reveal 0.6s ease-out forwards 0.3s;
+  opacity: 0;
+}
+
+.animate-text-reveal-delayed {
+  animation: text-reveal-delayed 0.6s ease-out forwards 0.5s;
+  opacity: 0;
+}
+
+.animate-scan-line {
+  animation: scan-line 1.5s ease-in-out infinite;
+}
+
+.animate-corner-reveal {
+  animation: corner-reveal 0.5s ease-out forwards 0.2s;
+  opacity: 0;
+}
+
+.animate-corner-reveal-delayed {
+  animation: corner-reveal-delayed 0.5s ease-out forwards 0.4s;
+  opacity: 0;
+}
