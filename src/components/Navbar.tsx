@@ -5,7 +5,7 @@ import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 import LanguageSwitcher from './LanguageSwitcher';
 import MoroccoTime from './MoroccoTime';
 import UserMenu from './UserMenu';
-import { Menu, X, Shield, Terminal, MessageSquare, Mail, Flag } from 'lucide-react';
+import { Menu, X, Shield, Terminal, MessageSquare, Mail, Brain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
@@ -75,15 +75,15 @@ const Navbar = () => {
             ))}
             
             <button
-              onClick={() => navigate('/ctf')}
+              onClick={() => navigate('/puzzles')}
               className={`flex items-center gap-2 transition-colors duration-300 relative group ${
-                location.pathname === '/ctf' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                location.pathname === '/puzzles' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
               }`}
             >
-              <Flag className="w-4 h-4" />
-              <span>CTF</span>
+              <Brain className="w-4 h-4" />
+              <span>Puzzles</span>
               <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
-                location.pathname === '/ctf' ? 'w-full' : 'w-0 group-hover:w-full'
+                location.pathname === '/puzzles' ? 'w-full' : 'w-0 group-hover:w-full'
               }`} />
             </button>
 
@@ -161,15 +161,15 @@ const Navbar = () => {
             
             <button
               onClick={() => {
-                navigate('/ctf');
+                navigate('/puzzles');
                 setIsOpen(false);
               }}
               className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-300 ${
-                location.pathname === '/ctf' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                location.pathname === '/puzzles' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
               }`}
             >
-              <Flag className="w-4 h-4" />
-              <span>CTF Challenges</span>
+              <Brain className="w-4 h-4" />
+              <span>Puzzles</span>
             </button>
 
             <button

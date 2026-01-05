@@ -11,7 +11,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Feed from "./pages/Feed";
 import Messages from "./pages/Messages";
-import CTF from "./pages/CTF";
+import Puzzles from "./pages/Puzzles";
 import Recruitment from "./pages/Recruitment";
 import NotFound from "./pages/NotFound";
 
@@ -32,7 +32,7 @@ function App() {
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/feed" element={<Feed />} />
                   <Route path="/messages" element={<Messages />} />
-                  <Route path="/ctf" element={<CTF />} />
+                  <Route path="/puzzles" element={<Puzzles />} />
                   <Route path="/r3cru1t" element={<Recruitment />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

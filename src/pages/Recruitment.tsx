@@ -7,10 +7,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Eye, Lock, CheckCircle, Key, Fingerprint, Radio } from 'lucide-react';
-
-const mysteryGlyphs = ['⊛', '◬', '⌬', '⎔', '⏣', '⌘', '⎈', '⌖'];
+import { Lock, CheckCircle, Key, Fingerprint, Shield } from 'lucide-react';
 
 // Animated typing effect
 function TypewriterText({ text, delay = 50 }: { text: string; delay?: number }) {
@@ -43,7 +40,6 @@ export default function Recruitment() {
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    // Delay content reveal for dramatic effect
     if (hasAccess && !accessLoading) {
       const timer = setTimeout(() => setShowContent(true), 500);
       return () => clearTimeout(timer);
@@ -67,22 +63,22 @@ export default function Recruitment() {
                 <Lock className="w-12 h-12 text-destructive animate-pulse" />
               </div>
               <h1 className="font-mono text-2xl text-destructive mb-4">
-                ACCESS_DENIED
+                ACCESS DENIED
               </h1>
               <p className="text-muted-foreground font-mono text-sm mb-6">
                 {!user 
-                  ? '// AUTHENTICATION_REQUIRED'
-                  : '// INSUFFICIENT_CLEARANCE'
+                  ? 'Authentication required'
+                  : 'Insufficient clearance'
                 }
               </p>
               <p className="text-xs text-muted-foreground/70 font-mono">
-                Complete at least one path in the Labyrinth to gain access.
+                Complete at least one path in The Maze to gain access.
               </p>
               <button
-                onClick={() => navigate('/ctf')}
+                onClick={() => navigate('/puzzles')}
                 className="mt-8 px-6 py-3 font-mono text-xs border border-primary/30 rounded hover:bg-primary/10 transition-colors"
               >
-                ⌬ RETURN_TO_LABYRINTH
+                Return to The Maze
               </button>
             </div>
           </main>
@@ -97,7 +93,7 @@ export default function Recruitment() {
     return (
       <>
         <Helmet>
-          <title>AUTHENTICATING... | IWALA99</title>
+          <title>Verifying... | IWALA99</title>
         </Helmet>
         <div className="min-h-screen bg-background flex flex-col">
           <Navbar />
@@ -107,7 +103,7 @@ export default function Recruitment() {
                 <Fingerprint className="w-12 h-12 text-primary" />
               </div>
               <p className="font-mono text-sm text-primary">
-                VERIFYING_CLEARANCE...
+                Verifying clearance...
               </p>
             </div>
           </main>
@@ -120,29 +116,14 @@ export default function Recruitment() {
   return (
     <>
       <Helmet>
-        <title>⌬ RECRUITMENT | IWALA99</title>
+        <title>Recruitment | IWALA99</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
-        {/* Mysterious background */}
+        {/* Background */}
         <div className="fixed inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
-          {mysteryGlyphs.map((glyph, i) => (
-            <span
-              key={i}
-              className="absolute text-primary font-mono animate-pulse"
-              style={{
-                top: `${10 + Math.random() * 80}%`,
-                left: `${5 + Math.random() * 90}%`,
-                fontSize: `${Math.random() * 1.5 + 0.8}rem`,
-                animationDelay: `${Math.random() * 5}s`,
-                opacity: 0.1,
-              }}
-            >
-              {glyph}
-            </span>
-          ))}
         </div>
 
         <Navbar />
@@ -151,18 +132,16 @@ export default function Recruitment() {
           {/* Header */}
           <div className={`text-center mb-12 transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
             <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-secondary/10 border border-secondary/30 rounded-full">
-              <Radio className="h-3 w-3 text-secondary animate-pulse" />
+              <Shield className="h-3 w-3 text-secondary animate-pulse" />
               <span className="text-[10px] font-mono text-secondary tracking-widest uppercase">
-                SECURE CHANNEL ESTABLISHED
+                SECURE CHANNEL
               </span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-mono mb-6">
-              <span className="text-muted-foreground opacity-50">⌬</span>{' '}
               <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-                WELCOME, CIPHER BREAKER
-              </span>{' '}
-              <span className="text-muted-foreground opacity-50">⌬</span>
+                WELCOME, SOLVER
+              </span>
             </h1>
 
             <div className="max-w-2xl mx-auto font-mono text-sm text-muted-foreground leading-relaxed">
@@ -176,7 +155,7 @@ export default function Recruitment() {
           {/* Completed Paths */}
           <div className={`mb-12 transition-all duration-1000 delay-500 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h2 className="text-center font-mono text-xs text-muted-foreground mb-6 tracking-widest">
-              PATHS_CONQUERED
+              PATHS CONQUERED
             </h2>
             <div className="flex flex-wrap justify-center gap-3">
               {completedPaths.map((path) => {
@@ -206,42 +185,42 @@ export default function Recruitment() {
                 <div className="flex items-center gap-3 mb-6">
                   <Key className="h-5 w-5 text-primary" />
                   <h3 className="font-mono text-sm tracking-wider text-primary">
-                    CLASSIFIED_TRANSMISSION
+                    CLASSIFIED TRANSMISSION
                   </h3>
                 </div>
 
                 <div className="space-y-6 font-mono text-sm text-muted-foreground leading-relaxed">
                   <p>
-                    <span className="text-primary">◬</span> You have demonstrated exceptional abilities in cryptanalysis, 
+                    You have demonstrated exceptional abilities in cryptanalysis, 
                     pattern recognition, and logical deduction. These are rare qualities.
                   </p>
                   
                   <p>
-                    <span className="text-primary">◬</span> We are a collective of individuals who believe that 
-                    privacy is a fundamental right. We seek those who can think beyond conventional boundaries.
+                    We are IWALA99—a collective of cybersecurity professionals dedicated to 
+                    protecting digital infrastructure and advancing security knowledge.
                   </p>
 
                   <p>
-                    <span className="text-primary">◬</span> The challenges you've solved were merely an entrance examination. 
+                    The challenges you've solved were merely an entrance examination. 
                     What lies ahead requires dedication, discretion, and an unwavering commitment to excellence.
                   </p>
 
                   <div className="border-t border-primary/20 pt-6 mt-8">
                     <p className="text-xs text-muted-foreground/70 mb-4">
-                      // NEXT_STEPS
+                      NEXT STEPS
                     </p>
                     <ul className="space-y-2 text-xs">
                       <li className="flex items-start gap-2">
-                        <span className="text-secondary">⌬</span>
-                        <span>Continue solving enigmas to unlock deeper access</span>
+                        <span className="text-secondary">•</span>
+                        <span>Continue solving puzzles to unlock deeper access</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-secondary">⌬</span>
-                        <span>Connect with fellow cipher breakers in the community</span>
+                        <span className="text-secondary">•</span>
+                        <span>Connect with fellow solvers in the community</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-secondary">⌬</span>
-                        <span>Watch for hidden messages across the platform</span>
+                        <span className="text-secondary">•</span>
+                        <span>Watch for hidden opportunities across the platform</span>
                       </li>
                     </ul>
                   </div>
@@ -249,21 +228,18 @@ export default function Recruitment() {
 
                 <div className="mt-8 pt-6 border-t border-primary/20 text-center">
                   <p className="font-mono text-[10px] text-muted-foreground/50">
-                    PGP: 0x89AB CDEF 1234 5678
-                  </p>
-                  <p className="font-mono text-[10px] text-muted-foreground/50 mt-1">
-                    "In umbra, veritas"
+                    IWALA99 // Security Through Knowledge
                   </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Hidden Easter Egg - only shows if all paths complete */}
+          {/* Inner circle access */}
           {pathStatuses.length > 0 && pathStatuses.every(p => p.isComplete) && (
             <div className={`mt-12 text-center transition-all duration-1000 delay-1500 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
               <div className="inline-flex items-center gap-2 px-6 py-3 bg-secondary/20 border border-secondary/50 rounded-lg">
-                <Eye className="h-4 w-4 text-secondary" />
+                <Shield className="h-4 w-4 text-secondary" />
                 <span className="font-mono text-xs text-secondary">
                   ALL PATHS CONQUERED — INNER CIRCLE ACCESS GRANTED
                 </span>
