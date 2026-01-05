@@ -1,11 +1,12 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Shield, Terminal, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Shield, Terminal, Github, Twitter, Linkedin, Mail, MessageCircle } from 'lucide-react';
 import MoroccoTime from './MoroccoTime';
 
 const Footer = () => {
   const { t } = useLanguage();
 
   const socialLinks = [
+    { icon: MessageCircle, href: 'https://discord.gg/Rw2nYydFwJ', label: 'Discord' },
     { icon: Github, href: '#', label: 'GitHub' },
     { icon: Twitter, href: '#', label: 'Twitter' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
@@ -47,6 +48,14 @@ const Footer = () => {
               <a href="#resources" className="block text-muted-foreground hover:text-primary transition-colors">
                 {t('nav.resources')}
               </a>
+              <a 
+                href="https://discord.gg/Rw2nYydFwJ" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block text-muted-foreground hover:text-primary transition-colors"
+              >
+                Discord Server
+              </a>
             </div>
           </div>
 
@@ -61,6 +70,8 @@ const Footer = () => {
                   <a
                     key={index}
                     href={link.href}
+                    target={link.href.startsWith('http') ? '_blank' : undefined}
+                    rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                     aria-label={link.label}
                     className="p-2 terminal-border text-muted-foreground hover:text-primary hover:glow-box transition-all duration-300"
                   >
