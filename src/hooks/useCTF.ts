@@ -13,6 +13,8 @@ export interface CTFChallenge {
   created_by: string | null;
   is_active: boolean;
   created_at: string;
+  expires_at: string | null;
+  is_weekly: boolean;
   solved_count?: number;
   is_solved?: boolean;
 }
@@ -34,11 +36,12 @@ export function useChallenges() {
   const fetchChallenges = async () => {
     setLoading(true);
     
-    // Fetch all challenges including boss
+    // Fetch all challenges including boss (filter out expired ones)
     const { data: challengesData, error } = await supabase
       .from('ctf_challenges')
       .select('*')
       .eq('is_active', true)
+      .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
       .order('points', { ascending: true });
 
     if (error) {

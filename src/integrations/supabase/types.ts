@@ -114,10 +114,12 @@ export type Database = {
           created_by: string | null
           description: string
           difficulty: string
+          expires_at: string | null
           flag_hash: string
           hints: string[] | null
           id: string
           is_active: boolean
+          is_weekly: boolean | null
           points: number
           title: string
           updated_at: string
@@ -128,10 +130,12 @@ export type Database = {
           created_by?: string | null
           description: string
           difficulty?: string
+          expires_at?: string | null
           flag_hash: string
           hints?: string[] | null
           id?: string
           is_active?: boolean
+          is_weekly?: boolean | null
           points?: number
           title: string
           updated_at?: string
@@ -142,10 +146,12 @@ export type Database = {
           created_by?: string | null
           description?: string
           difficulty?: string
+          expires_at?: string | null
           flag_hash?: string
           hints?: string[] | null
           id?: string
           is_active?: boolean
+          is_weekly?: boolean | null
           points?: number
           title?: string
           updated_at?: string
@@ -238,6 +244,47 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          message: string
+          read_at: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          message: string
+          read_at?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          message?: string
+          read_at?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_likes: {
         Row: {
           created_at: string
@@ -317,20 +364,35 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
+          badges: string[] | null
+          bio: string | null
           created_at: string
           id: string
+          rank: string | null
+          total_points: number | null
           updated_at: string
           username: string
         }
         Insert: {
+          avatar_url?: string | null
+          badges?: string[] | null
+          bio?: string | null
           created_at?: string
           id: string
+          rank?: string | null
+          total_points?: number | null
           updated_at?: string
           username: string
         }
         Update: {
+          avatar_url?: string | null
+          badges?: string[] | null
+          bio?: string | null
           created_at?: string
           id?: string
+          rank?: string | null
+          total_points?: number | null
           updated_at?: string
           username?: string
         }

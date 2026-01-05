@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Message } from '@/hooks/useMessages';
 import { useTypingIndicator } from '@/hooks/useTypingIndicator';
+import { useSound } from '@/contexts/SoundContext';
 import { formatDistanceToNow } from 'date-fns';
-import { Send, User } from 'lucide-react';
+import { Send, User, Lock, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -26,16 +27,26 @@ const MessageThread = ({
   onMessagesViewed 
 }: MessageThreadProps) => {
   const { user } = useAuth();
+  const { playSound } = useSound();
   const [newMessage, setNewMessage] = useState('');
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { isOtherTyping, sendTypingIndicator, stopTyping } = useTypingIndicator(conversationId);
+  const prevMessageCount = useRef(messages.length);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isOtherTyping]);
+    // Play notification sound for new incoming messages
+    if (messages.length > prevMessageCount.current) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage && lastMessage.sender_id !== user?.id) {
+        playSound('notification');
+      }
+    }
+    prevMessageCount.current = messages.length;
+  }, [messages, isOtherTyping, playSound, user?.id]);
 
   useEffect(() => {
     // Mark messages as read when viewing
@@ -49,11 +60,14 @@ const MessageThread = ({
     
     setSending(true);
     stopTyping();
+    playSound('click');
     try {
       await onSendMessage(newMessage);
       setNewMessage('');
+      playSound('success');
     } catch (error) {
       console.error('Failed to send message:', error);
+      playSound('error');
     } finally {
       setSending(false);
     }
@@ -82,19 +96,24 @@ const MessageThread = ({
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full relative">
+      {/* Encrypted channel indicator */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary/50 via-primary/30 to-secondary/50" />
+      
       {/* Header */}
-      <div className="p-4 border-b border-border flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+      <div className="p-4 border-b border-border flex items-center gap-3 bg-gradient-to-r from-background via-primary/5 to-background">
+        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center relative">
           <User className="w-5 h-5 text-primary" />
+          <Shield className="w-3 h-3 text-secondary absolute -bottom-0.5 -right-0.5" />
         </div>
-        <div>
-          <p className="font-medium text-foreground">{otherUsername}</p>
-          <p className="text-xs text-muted-foreground">
+        <div className="flex-1">
+          <p className="font-medium text-foreground font-mono">{otherUsername}</p>
+          <p className="text-xs text-muted-foreground flex items-center gap-1">
+            <Lock className="w-3 h-3 text-secondary" />
             {isOtherTyping ? (
-              <span className="text-primary animate-pulse">typing...</span>
+              <span className="text-primary animate-pulse">encrypting...</span>
             ) : (
-              'Online'
+              <span className="text-secondary/70">Secure Channel</span>
             )}
           </p>
         </div>

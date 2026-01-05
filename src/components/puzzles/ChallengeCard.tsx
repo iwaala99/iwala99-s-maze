@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Check, Lock, Users, Lightbulb, Send, EyeOff, Terminal, Binary, Fingerprint, Shield, Skull, Zap, Sparkles } from 'lucide-react';
+import { Check, Lock, Users, Lightbulb, Send, EyeOff, Terminal, Binary, Fingerprint, Shield, Skull, Zap, Sparkles, Clock } from 'lucide-react';
 import { CTFChallenge, useSubmitFlag } from '@/hooks/useCTF';
+import CountdownTimer from '@/components/CountdownTimer';
+import { useSound } from '@/contexts/SoundContext';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -171,6 +173,7 @@ export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
   const { submitFlag, submitting } = useSubmitFlag();
   const { toast } = useToast();
   const { user } = useAuth();
+  const { playSound } = useSound();
 
   const config = difficultyConfig[challenge.difficulty] || difficultyConfig.easy;
   const isBoss = challenge.difficulty === 'boss';
@@ -206,17 +209,20 @@ export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
     e.preventDefault();
     if (!flag.trim()) return;
 
+    playSound('click');
     const result = await submitFlag(challenge.id, flag);
     
     if (result.success) {
       setFlag('');
       setShowCelebration(true);
+      playSound('success');
       toast({
         title: '✓ PUZZLE SOLVED',
         description: result.message,
         className: 'bg-secondary/20 border-secondary',
       });
     } else {
+      playSound('error');
       toast({
         title: '✗ INCORRECT',
         description: result.message,
@@ -369,13 +375,24 @@ export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
                   <Badge variant="outline" className={`font-mono text-[10px] ${config.color}`}>
                     {config.label}
                   </Badge>
+                  {challenge.is_weekly && (
+                    <Badge variant="outline" className="font-mono text-[10px] bg-purple-500/10 text-purple-400 border-purple-500/20">
+                      <Clock className="h-2.5 w-2.5 mr-1" />
+                      WEEKLY
+                    </Badge>
+                  )}
                   <span className="font-mono text-xs text-primary group-hover:glow-text transition-all">
                     +{challenge.points} pts
                   </span>
                 </div>
-                <div className="flex items-center gap-1 text-[10px] text-muted-foreground font-mono">
-                  <Users className="h-3 w-3" />
-                  <span>{challenge.solved_count}</span>
+                <div className="flex items-center gap-2">
+                  {challenge.expires_at && (
+                    <CountdownTimer expiresAt={challenge.expires_at} compact />
+                  )}
+                  <div className="flex items-center gap-1 text-[10px] text-muted-foreground font-mono">
+                    <Users className="h-3 w-3" />
+                    <span>{challenge.solved_count}</span>
+                  </div>
                 </div>
               </div>
 
