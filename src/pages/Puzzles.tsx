@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import puzzlesBg from '@/assets/puzzles-bg.png';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +28,22 @@ export default function Puzzles() {
   const { pathStatuses, hasCompletedAnyPath, refetch: refetchPaths } = usePathCompletion();
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [difficultyFilter, setDifficultyFilter] = useState('all');
+  const [scrollY, setScrollY] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        setScrollY(containerRef.current.scrollTop);
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll, { passive: true });
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
 
   const handleSolved = () => {
     refetch();
@@ -61,11 +77,17 @@ export default function Puzzles() {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
-        {/* Background image */}
+      <div 
+        ref={containerRef}
+        className="min-h-screen bg-background flex flex-col relative overflow-y-auto overflow-x-hidden"
+      >
+        {/* Background image with parallax */}
         <div 
-          className="fixed inset-0 pointer-events-none bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${puzzlesBg})` }}
+          className="fixed inset-0 pointer-events-none bg-cover bg-center bg-no-repeat will-change-transform"
+          style={{ 
+            backgroundImage: `url(${puzzlesBg})`,
+            transform: `translateY(${scrollY * 0.3}px) scale(1.1)`,
+          }}
         />
         {/* Dark gradient overlay */}
         <div className="fixed inset-0 pointer-events-none bg-gradient-to-b from-background/95 via-background/85 to-background/95" />
