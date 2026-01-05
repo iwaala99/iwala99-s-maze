@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -162,6 +163,7 @@ function SolvedCelebration({ show, onComplete }: { show: boolean; onComplete: ()
 }
 
 export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
+  const navigate = useNavigate();
   const [flag, setFlag] = useState('');
   const [showHints, setShowHints] = useState(false);
   const [open, setOpen] = useState(false);
@@ -191,7 +193,14 @@ export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
     setShowCelebration(false);
     setOpen(false);
     onSolved();
-  }, [onSolved]);
+    
+    // Redirect to OMEGA recruitment page if boss puzzle was solved
+    if (isBoss) {
+      setTimeout(() => {
+        navigate('/0m3g4');
+      }, 500);
+    }
+  }, [onSolved, isBoss, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
