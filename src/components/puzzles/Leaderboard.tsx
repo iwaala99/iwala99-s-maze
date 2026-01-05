@@ -2,8 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLeaderboard } from '@/hooks/useCTF';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const rankGlyphs = ['⬡', '⬢', '⬣'];
+import { Trophy, Medal, Award } from 'lucide-react';
 
 export function Leaderboard() {
   const { leaderboard, loading } = useLeaderboard();
@@ -13,8 +12,8 @@ export function Leaderboard() {
       <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
-            <span className="text-primary">◬</span>
-            CIPHER_BREAKERS
+            <Trophy className="h-4 w-4 text-primary" />
+            TOP SOLVERS
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
@@ -31,25 +30,31 @@ export function Leaderboard() {
       <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
-            <span className="text-primary">◬</span>
-            CIPHER_BREAKERS
+            <Trophy className="h-4 w-4 text-primary" />
+            TOP SOLVERS
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-xs text-muted-foreground text-center py-8 font-mono">
-            // AWAITING_FIRST_SOLVER
+            No solvers yet. Be the first!
           </p>
         </CardContent>
       </Card>
     );
   }
 
+  const rankIcons = [
+    <Trophy key="1" className="h-4 w-4 text-yellow-400" />,
+    <Medal key="2" className="h-4 w-4 text-gray-400" />,
+    <Award key="3" className="h-4 w-4 text-amber-600" />,
+  ];
+
   return (
     <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
-          <span className="text-primary">◬</span>
-          CIPHER_BREAKERS
+          <Trophy className="h-4 w-4 text-primary" />
+          TOP SOLVERS
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-1">
@@ -64,12 +69,7 @@ export function Leaderboard() {
           >
             <div className="w-6 flex justify-center">
               {index < 3 ? (
-                <span className={`font-mono ${
-                  index === 0 ? 'text-yellow-400' : 
-                  index === 1 ? 'text-gray-400' : 'text-amber-600'
-                }`}>
-                  {rankGlyphs[index]}
-                </span>
+                rankIcons[index]
               ) : (
                 <span className="text-[10px] font-mono text-muted-foreground">
                   {String(index + 1).padStart(2, '0')}
@@ -79,7 +79,7 @@ export function Leaderboard() {
             <div className="flex-1 min-w-0">
               <p className="font-mono text-xs truncate">{entry.username}</p>
               <p className="text-[10px] text-muted-foreground font-mono">
-                {entry.solved_count} enigma{entry.solved_count !== 1 ? 's' : ''}
+                {entry.solved_count} puzzle{entry.solved_count !== 1 ? 's' : ''}
               </p>
             </div>
             <div className="text-right">
