@@ -35,6 +35,7 @@ const difficultyConfig: Record<string, { color: string; label: string; glow: str
   medium: { color: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20', label: 'Medium', glow: 'shadow-yellow-500/20' },
   hard: { color: 'bg-orange-500/10 text-orange-400 border-orange-500/20', label: 'Hard', glow: 'shadow-orange-500/20' },
   insane: { color: 'bg-red-500/10 text-red-400 border-red-500/20', label: 'Insane', glow: 'shadow-red-500/20' },
+  boss: { color: 'bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-400 border-red-500/40', label: 'ΩMEGA', glow: 'shadow-red-500/40' },
 };
 
 const categoryLabels: Record<string, string> = {
@@ -44,6 +45,7 @@ const categoryLabels: Record<string, string> = {
   pwn: 'Exploitation',
   reverse: 'Reverse Engineering',
   misc: 'Miscellaneous',
+  boss: 'Ω FINAL',
 };
 
 // Cryptic symbols for mysterious atmosphere
@@ -169,7 +171,7 @@ export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
   const { user } = useAuth();
 
   const config = difficultyConfig[challenge.difficulty] || difficultyConfig.easy;
-
+  const isBoss = challenge.difficulty === 'boss';
   // Generate unique cryptic elements for each card
   const crypticElements = useMemo(() => {
     const seed = challenge.id.charCodeAt(0) + (challenge.id.charCodeAt(1) || 0);
@@ -223,14 +225,19 @@ export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
           <Card className={`
             relative cursor-pointer overflow-hidden
             transition-all duration-500 
-            hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10
             hover:scale-[1.02]
             group
-            ${challenge.is_solved 
-              ? 'border-secondary/30 bg-gradient-to-br from-secondary/5 via-background to-secondary/10' 
-              : 'bg-gradient-to-br from-background via-background to-muted/30'
+            ${isBoss 
+              ? 'border-red-500/40 bg-gradient-to-br from-red-500/10 via-background to-orange-500/10 hover:border-red-500/70 hover:shadow-lg hover:shadow-red-500/20' 
+              : challenge.is_solved 
+                ? 'border-secondary/30 bg-gradient-to-br from-secondary/5 via-background to-secondary/10 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10' 
+                : 'bg-gradient-to-br from-background via-background to-muted/30 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10'
             }
           `}>
+            {/* Boss-specific pulsing border */}
+            {isBoss && (
+              <div className="absolute inset-0 rounded-lg border-2 border-red-500/30 animate-pulse pointer-events-none" />
+            )}
             {/* Animated grid background */}
             <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.06] transition-opacity duration-700">
               <div 
@@ -248,22 +255,22 @@ export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
             {/* Floating cryptic symbols */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
               <span 
-                className="absolute text-xl text-primary/[0.08] group-hover:text-primary/20 animate-float transition-colors duration-500"
+                className={`absolute text-xl animate-float transition-colors duration-500 ${isBoss ? 'text-red-500/20 group-hover:text-red-500/40' : 'text-primary/[0.08] group-hover:text-primary/20'}`}
                 style={{ top: '15%', right: '8%', animationDelay: `${crypticElements.floatDelay1}s` }}
               >
-                {crypticElements.symbol1}
+                {isBoss ? 'Ω' : crypticElements.symbol1}
               </span>
               <span 
-                className="absolute text-lg text-primary/[0.05] group-hover:text-primary/15 animate-float-reverse transition-colors duration-500"
+                className={`absolute text-lg animate-float-reverse transition-colors duration-500 ${isBoss ? 'text-orange-500/15 group-hover:text-orange-500/30' : 'text-primary/[0.05] group-hover:text-primary/15'}`}
                 style={{ bottom: '20%', left: '5%', animationDelay: `${crypticElements.floatDelay2}s` }}
               >
-                {crypticElements.symbol2}
+                {isBoss ? '⚠' : crypticElements.symbol2}
               </span>
               <span 
-                className="absolute text-sm text-primary/[0.06] group-hover:text-primary/15 animate-float transition-colors duration-500"
+                className={`absolute text-sm animate-float transition-colors duration-500 ${isBoss ? 'text-red-500/15 group-hover:text-red-500/25' : 'text-primary/[0.06] group-hover:text-primary/15'}`}
                 style={{ top: '60%', right: '15%', animationDelay: `${crypticElements.floatDelay3}s` }}
               >
-                {crypticElements.symbol3}
+                {isBoss ? '☠' : crypticElements.symbol3}
               </span>
             </div>
 
