@@ -67,8 +67,24 @@ export default function Puzzles() {
           className="fixed inset-0 pointer-events-none bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${puzzlesBg})` }}
         />
-        {/* Overlay for better readability */}
-        <div className="fixed inset-0 pointer-events-none bg-background/80" />
+        {/* Dark gradient overlay */}
+        <div className="fixed inset-0 pointer-events-none bg-gradient-to-b from-background/95 via-background/85 to-background/95" />
+        {/* Vignette effect */}
+        <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_transparent_0%,_hsl(var(--background))_70%)]" />
+        {/* Scanline effect */}
+        <div 
+          className="fixed inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--foreground) / 0.1) 2px, hsl(var(--foreground) / 0.1) 4px)',
+          }}
+        />
+        {/* Subtle noise texture */}
+        <div 
+          className="fixed inset-0 pointer-events-none opacity-[0.015] mix-blend-overlay"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          }}
+        />
 
         <Navbar />
 
