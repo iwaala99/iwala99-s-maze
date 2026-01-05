@@ -9,7 +9,7 @@ import { useChallenges } from '@/hooks/useCTF';
 import { usePathCompletion } from '@/hooks/usePathCompletion';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { Brain, GitBranch, Zap, KeyRound, CheckCircle } from 'lucide-react';
+import { Brain, GitBranch, Zap, KeyRound, CheckCircle, Skull, Lock, Eye } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -23,7 +23,7 @@ const difficulties = ['all', 'easy', 'medium', 'hard', 'insane'];
 
 export default function Puzzles() {
   const navigate = useNavigate();
-  const { challenges, loading, refetch } = useChallenges();
+  const { challenges, bossPuzzle, hasUnlockedBoss, loading, refetch } = useChallenges();
   const { pathStatuses, hasCompletedAnyPath, refetch: refetchPaths } = usePathCompletion();
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [difficultyFilter, setDifficultyFilter] = useState('all');
@@ -32,6 +32,10 @@ export default function Puzzles() {
     refetch();
     refetchPaths();
   };
+
+  // Count insane challenges for progress
+  const insaneChallenges = challenges.filter(c => c.difficulty === 'insane');
+  const solvedInsane = insaneChallenges.filter(c => c.is_solved).length;
 
   const filteredChallenges = challenges.filter((c) => {
     if (categoryFilter !== 'all' && c.category !== categoryFilter) return false;
@@ -250,6 +254,67 @@ export default function Puzzles() {
             {/* Sidebar - Leaderboard */}
             <div className="space-y-6">
               <Leaderboard />
+
+              {/* Boss Puzzle Section */}
+              {insaneChallenges.length > 0 && (
+                <div className={`
+                  relative p-4 rounded-lg border overflow-hidden
+                  ${hasUnlockedBoss 
+                    ? 'border-red-500/50 bg-gradient-to-br from-red-500/10 via-background to-orange-500/10' 
+                    : 'border-primary/20 bg-muted/20'
+                  }
+                `}>
+                  {/* Animated background for unlocked state */}
+                  {hasUnlockedBoss && (
+                    <div className="absolute inset-0 opacity-20">
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 via-transparent to-orange-500/20 animate-pulse" />
+                    </div>
+                  )}
+
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Skull className={`h-5 w-5 ${hasUnlockedBoss ? 'text-red-400 animate-pulse' : 'text-muted-foreground'}`} />
+                      <span className={`font-mono text-xs uppercase tracking-wider ${hasUnlockedBoss ? 'text-red-400' : 'text-muted-foreground'}`}>
+                        FINAL CHALLENGE
+                      </span>
+                    </div>
+
+                    {/* Progress bar */}
+                    <div className="mb-3">
+                      <div className="flex justify-between text-[10px] font-mono text-muted-foreground mb-1">
+                        <span>INSANE PUZZLES</span>
+                        <span>{solvedInsane}/{insaneChallenges.length}</span>
+                      </div>
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full transition-all duration-500 ${hasUnlockedBoss ? 'bg-gradient-to-r from-red-500 to-orange-500' : 'bg-primary/50'}`}
+                          style={{ width: `${insaneChallenges.length > 0 ? (solvedInsane / insaneChallenges.length) * 100 : 0}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {hasUnlockedBoss && bossPuzzle ? (
+                      <div className="space-y-3">
+                        <p className="text-xs font-mono text-red-400/80">
+                          ⚠ OMEGA CLEARANCE UNLOCKED
+                        </p>
+                        <ChallengeCard
+                          challenge={bossPuzzle}
+                          onSolved={handleSolved}
+                        />
+                      </div>
+                    ) : (
+                      <div className="text-center py-2">
+                        <Lock className="h-6 w-6 mx-auto mb-2 text-muted-foreground/50" />
+                        <p className="text-[10px] font-mono text-muted-foreground">
+                          Complete all INSANE puzzles<br />
+                          to unlock the final challenge
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               
               {/* Hidden access hint - only shows when path completed */}
               {hasCompletedAnyPath ? (

@@ -26,13 +26,15 @@ export interface LeaderboardEntry {
 
 export function useChallenges() {
   const [challenges, setChallenges] = useState<CTFChallenge[]>([]);
+  const [bossPuzzle, setBossPuzzle] = useState<CTFChallenge | null>(null);
+  const [hasUnlockedBoss, setHasUnlockedBoss] = useState(false);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
   const fetchChallenges = async () => {
     setLoading(true);
     
-    // Fetch challenges
+    // Fetch all challenges including boss
     const { data: challengesData, error } = await supabase
       .from('ctf_challenges')
       .select('*')
@@ -44,6 +46,10 @@ export function useChallenges() {
       setLoading(false);
       return;
     }
+
+    // Separate boss puzzle from regular challenges
+    const regularChallenges = challengesData?.filter(c => c.difficulty !== 'boss') || [];
+    const boss = challengesData?.find(c => c.difficulty === 'boss') || null;
 
     // Fetch submission counts for each challenge
     const { data: submissionCounts } = await supabase
@@ -67,11 +73,27 @@ export function useChallenges() {
       countMap[s.challenge_id] = (countMap[s.challenge_id] || 0) + 1;
     });
 
-    const enrichedChallenges = challengesData?.map(c => ({
+    const enrichedChallenges = regularChallenges.map(c => ({
       ...c,
       solved_count: countMap[c.id] || 0,
       is_solved: userSolvedIds.includes(c.id)
-    })) || [];
+    }));
+
+    // Check if user has completed all insane challenges
+    const insaneChallenges = enrichedChallenges.filter(c => c.difficulty === 'insane');
+    const allInsaneSolved = insaneChallenges.length > 0 && 
+      insaneChallenges.every(c => c.is_solved);
+    
+    setHasUnlockedBoss(allInsaneSolved);
+
+    // Enrich boss puzzle if it exists
+    if (boss) {
+      setBossPuzzle({
+        ...boss,
+        solved_count: countMap[boss.id] || 0,
+        is_solved: userSolvedIds.includes(boss.id)
+      });
+    }
 
     setChallenges(enrichedChallenges);
     setLoading(false);
@@ -81,7 +103,13 @@ export function useChallenges() {
     fetchChallenges();
   }, [user]);
 
-  return { challenges, loading, refetch: fetchChallenges };
+  return { 
+    challenges, 
+    bossPuzzle, 
+    hasUnlockedBoss, 
+    loading, 
+    refetch: fetchChallenges 
+  };
 }
 
 export function useLeaderboard() {
