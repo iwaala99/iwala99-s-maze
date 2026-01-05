@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 import LanguageSwitcher from './LanguageSwitcher';
 import MoroccoTime from './MoroccoTime';
 import UserMenu from './UserMenu';
@@ -12,6 +13,7 @@ const Navbar = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
+  const { unreadCount } = useUnreadMessages();
 
   const isHomePage = location.pathname === '/';
 
@@ -91,7 +93,14 @@ const Navbar = () => {
                 location.pathname === '/messages' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
               }`}
             >
-              <Mail className="w-4 h-4" />
+              <div className="relative">
+                <Mail className="w-4 h-4" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-secondary text-secondary-foreground text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </div>
               <span>Messages</span>
               <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
                 location.pathname === '/messages' ? 'w-full' : 'w-0 group-hover:w-full'
@@ -159,7 +168,14 @@ const Navbar = () => {
                 location.pathname === '/messages' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
               }`}
             >
-              <Mail className="w-4 h-4" />
+              <div className="relative">
+                <Mail className="w-4 h-4" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-secondary text-secondary-foreground text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </div>
               <span>Messages</span>
             </button>
           </div>
