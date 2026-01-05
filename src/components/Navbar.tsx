@@ -1,16 +1,21 @@
 import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import MoroccoTime from './MoroccoTime';
 import UserMenu from './UserMenu';
-import { Menu, X, Shield, Terminal } from 'lucide-react';
+import { Menu, X, Shield, Terminal, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useLanguage();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const navItems = [
+  const isHomePage = location.pathname === '/';
+
+  const homeNavItems = [
     { key: 'nav.home', href: '#home' },
     { key: 'nav.roles', href: '#roles' },
     { key: 'nav.community', href: '#community' },
@@ -19,9 +24,19 @@ const Navbar = () => {
   ];
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (!isHomePage) {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
     setIsOpen(false);
   };
@@ -31,7 +46,10 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <button 
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
             <div className="relative">
               <Shield className="w-8 h-8 text-primary animate-glow-pulse" />
               <Terminal className="w-4 h-4 text-secondary absolute -bottom-1 -right-1" />
@@ -39,11 +57,11 @@ const Navbar = () => {
             <span className="font-display font-bold text-xl text-primary glow-text">
               IWALA99
             </span>
-          </div>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            {navItems.map((item) => (
+            {isHomePage && homeNavItems.map((item) => (
               <button
                 key={item.key}
                 onClick={() => scrollToSection(item.href)}
@@ -53,6 +71,19 @@ const Navbar = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </button>
             ))}
+            
+            <button
+              onClick={() => navigate('/feed')}
+              className={`flex items-center gap-2 transition-colors duration-300 relative group ${
+                location.pathname === '/feed' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+              }`}
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Feed</span>
+              <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
+                location.pathname === '/feed' ? 'w-full' : 'w-0 group-hover:w-full'
+              }`} />
+            </button>
           </div>
 
           {/* Right side */}
@@ -81,7 +112,8 @@ const Navbar = () => {
             <div className="mb-4">
               <MoroccoTime />
             </div>
-            {navItems.map((item, index) => (
+            
+            {isHomePage && homeNavItems.map((item, index) => (
               <button
                 key={item.key}
                 onClick={() => scrollToSection(item.href)}
@@ -91,6 +123,19 @@ const Navbar = () => {
                 {t(item.key)}
               </button>
             ))}
+            
+            <button
+              onClick={() => {
+                navigate('/feed');
+                setIsOpen(false);
+              }}
+              className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-300 ${
+                location.pathname === '/feed' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+              }`}
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Cyber Feed</span>
+            </button>
           </div>
         )}
       </div>

@@ -82,13 +82,22 @@ const CommunitySection = () => {
         </div>
 
         {/* CTA */}
-        <div className="text-center animate-fade-up" style={{ animationDelay: '0.4s' }}>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '0.4s' }}>
           <Button
             size="lg"
             onClick={() => navigate('/auth')}
             className="glow-box bg-primary text-primary-foreground hover:bg-primary/90 font-display text-lg px-12 py-6"
           >
             {t('hero.join')}
+          </Button>
+          
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => navigate('/feed')}
+            className="border-secondary text-secondary hover:bg-secondary/10 font-display text-lg px-12 py-6"
+          >
+            View Feed
           </Button>
         </div>
       </div>
