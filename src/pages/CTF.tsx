@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ChallengeCard } from '@/components/ctf/ChallengeCard';
 import { Leaderboard } from '@/components/ctf/Leaderboard';
 import { useChallenges } from '@/hooks/useCTF';
+import { usePathCompletion } from '@/hooks/usePathCompletion';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { Eye, GitBranch, Sparkles } from 'lucide-react';
+import { Eye, GitBranch, Sparkles, KeyRound, CheckCircle } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -23,9 +25,16 @@ const difficulties = ['all', 'easy', 'medium', 'hard', 'insane'];
 const mysteryGlyphs = ['⊛', '◬', '⌬', '⎔', '⏣', '⌘', '⎈', '⌖'];
 
 export default function CTF() {
+  const navigate = useNavigate();
   const { challenges, loading, refetch } = useChallenges();
+  const { pathStatuses, hasCompletedAnyPath, refetch: refetchPaths } = usePathCompletion();
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [difficultyFilter, setDifficultyFilter] = useState('all');
+
+  const handleSolved = () => {
+    refetch();
+    refetchPaths();
+  };
 
   const filteredChallenges = challenges.filter((c) => {
     if (categoryFilter !== 'all' && c.category !== categoryFilter) return false;
@@ -168,41 +177,69 @@ export default function CTF() {
               ) : categoryFilter === 'all' && Object.keys(groupedByCategory).length > 1 ? (
                 // Show branching paths when viewing all categories
                 <div className="space-y-8">
-                  {Object.entries(groupedByCategory).map(([category, catChallenges], pathIndex) => (
-                    <div key={category} className="relative">
-                      {/* Path header */}
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
-                          <span className="text-primary font-mono text-xs">
-                            {mysteryGlyphs[pathIndex % mysteryGlyphs.length]}
-                          </span>
+                  {Object.entries(groupedByCategory).map(([category, catChallenges], pathIndex) => {
+                    const pathStatus = pathStatuses.find(p => p.category === category);
+                    const isPathComplete = pathStatus?.isComplete || false;
+                    
+                    return (
+                      <div key={category} className="relative">
+                        {/* Path header */}
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                            isPathComplete 
+                              ? 'bg-secondary/20 border border-secondary/50' 
+                              : 'bg-primary/10 border border-primary/30'
+                          }`}>
+                            {isPathComplete ? (
+                              <CheckCircle className="h-4 w-4 text-secondary" />
+                            ) : (
+                              <span className="text-primary font-mono text-xs">
+                                {mysteryGlyphs[pathIndex % mysteryGlyphs.length]}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className={`font-mono text-sm tracking-wider uppercase ${
+                              isPathComplete ? 'text-secondary' : 'text-primary'
+                            }`}>
+                              PATH_{category.toUpperCase()}
+                              {isPathComplete && ' ✓'}
+                            </h3>
+                            <p className="text-xs text-muted-foreground font-mono">
+                              {catChallenges.length} enigma{catChallenges.length !== 1 ? 's' : ''} • {catChallenges.filter(c => c.is_solved).length} solved
+                            </p>
+                          </div>
+                          
+                          {/* Hidden link revealed when path complete */}
+                          {isPathComplete && (
+                            <button
+                              onClick={() => navigate('/r3cru1t')}
+                              className="flex items-center gap-2 px-3 py-1.5 bg-secondary/10 border border-secondary/30 rounded text-xs font-mono text-secondary hover:bg-secondary/20 transition-colors animate-pulse"
+                            >
+                              <KeyRound className="h-3 w-3" />
+                              ACCESS_GRANTED
+                            </button>
+                          )}
+                          
+                          {/* Connecting line to next path */}
+                          {pathIndex < Object.keys(groupedByCategory).length - 1 && !isPathComplete && (
+                            <div className="flex-1 h-px bg-gradient-to-r from-primary/30 via-primary/10 to-transparent" />
+                          )}
                         </div>
-                        <div>
-                          <h3 className="font-mono text-sm text-primary tracking-wider uppercase">
-                            PATH_{category.toUpperCase()}
-                          </h3>
-                          <p className="text-xs text-muted-foreground font-mono">
-                            {catChallenges.length} enigma{catChallenges.length !== 1 ? 's' : ''} • {catChallenges.filter(c => c.is_solved).length} solved
-                          </p>
+                        
+                        {/* Challenges in this path */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-11">
+                          {catChallenges.map((challenge) => (
+                            <ChallengeCard
+                              key={challenge.id}
+                              challenge={challenge}
+                              onSolved={handleSolved}
+                            />
+                          ))}
                         </div>
-                        {/* Connecting line to next path */}
-                        {pathIndex < Object.keys(groupedByCategory).length - 1 && (
-                          <div className="flex-1 h-px bg-gradient-to-r from-primary/30 via-primary/10 to-transparent" />
-                        )}
                       </div>
-                      
-                      {/* Challenges in this path */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-11">
-                        {catChallenges.map((challenge) => (
-                          <ChallengeCard
-                            key={challenge.id}
-                            challenge={challenge}
-                            onSolved={refetch}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                   
                   {/* Convergence point hint */}
                   <div className="relative flex items-center justify-center py-8">
@@ -223,7 +260,7 @@ export default function CTF() {
                     <ChallengeCard
                       key={challenge.id}
                       challenge={challenge}
-                      onSolved={refetch}
+                      onSolved={handleSolved}
                     />
                   ))}
                 </div>
@@ -234,16 +271,31 @@ export default function CTF() {
             <div className="space-y-6">
               <Leaderboard />
               
-              {/* Cryptic message */}
-              <div className="p-4 border border-dashed border-primary/20 rounded-lg">
-                <p className="text-xs font-mono text-muted-foreground text-center leading-relaxed">
-                  <span className="text-primary">PGP:</span> 0x89AB CDEF 1234 5678
-                  <br />
-                  <span className="opacity-50">
-                    // Those who understand will find us
-                  </span>
-                </p>
-              </div>
+              {/* Hidden access hint - only shows when path completed */}
+              {hasCompletedAnyPath ? (
+                <button
+                  onClick={() => navigate('/r3cru1t')}
+                  className="w-full p-4 border border-secondary/30 bg-secondary/5 rounded-lg hover:bg-secondary/10 transition-colors group"
+                >
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <KeyRound className="h-4 w-4 text-secondary group-hover:animate-pulse" />
+                    <span className="font-mono text-xs text-secondary">CLEARANCE_GRANTED</span>
+                  </div>
+                  <p className="text-[10px] font-mono text-muted-foreground">
+                    // Click to access hidden transmission
+                  </p>
+                </button>
+              ) : (
+                <div className="p-4 border border-dashed border-primary/20 rounded-lg">
+                  <p className="text-xs font-mono text-muted-foreground text-center leading-relaxed">
+                    <span className="text-primary">PGP:</span> 0x89AB CDEF 1234 5678
+                    <br />
+                    <span className="opacity-50">
+                      // Complete a path to unlock secrets
+                    </span>
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </main>
