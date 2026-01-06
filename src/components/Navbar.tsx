@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
+
 import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -14,39 +14,12 @@ import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { t } = useLanguage();
+  
   const navigate = useNavigate();
   const location = useLocation();
   const { unreadCount } = useUnreadMessages();
   const { user } = useAuth();
 
-  const isHomePage = location.pathname === '/';
-
-  const homeNavItems = [
-    { key: 'nav.home', href: '#home' },
-    { key: 'nav.roles', href: '#roles' },
-    { key: 'nav.community', href: '#community' },
-    { key: 'nav.resources', href: '#resources' },
-    { key: 'nav.about', href: '#about' },
-  ];
-
-  const scrollToSection = (href: string) => {
-    if (!isHomePage) {
-      navigate('/');
-      setTimeout(() => {
-        const element = document.querySelector(href);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    } else {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-    setIsOpen(false);
-  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-primary/20">
@@ -68,16 +41,6 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            {isHomePage && homeNavItems.map((item) => (
-              <button
-                key={item.key}
-                onClick={() => scrollToSection(item.href)}
-                className="text-muted-foreground hover:text-primary transition-colors duration-300 relative group"
-              >
-                {t(item.key)}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </button>
-            ))}
             
             <button
               onClick={() => navigate('/puzzles')}
@@ -171,16 +134,6 @@ const Navbar = () => {
               <CompactTime />
             </div>
             
-            {isHomePage && homeNavItems.map((item, index) => (
-              <button
-                key={item.key}
-                onClick={() => scrollToSection(item.href)}
-                className="block w-full text-left py-3 text-muted-foreground hover:text-primary transition-colors duration-300"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {t(item.key)}
-              </button>
-            ))}
             
             <button
               onClick={() => {
