@@ -51,10 +51,6 @@ const HeroSection = () => {
       <div className="relative z-10 container mx-auto px-4 text-center">
         {/* Main logo */}
         <div className="mb-8 animate-fade-up">
-          <div className="inline-flex items-center justify-center gap-4 mb-6">
-            <Shield className="w-16 h-16 md:w-24 md:h-24 text-primary animate-float" />
-            <Terminal className="w-12 h-12 md:w-16 md:h-16 text-secondary animate-float" style={{ animationDelay: '0.5s' }} />
-          </div>
           
           <p className="text-muted-foreground text-lg md:text-xl mb-2">
             {t('hero.welcome')}
