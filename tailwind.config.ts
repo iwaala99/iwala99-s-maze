@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         mono: ['JetBrains Mono', 'monospace'],
-        display: ['Orbitron', 'sans-serif'],
+        display: ['Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -50,11 +50,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        neon: {
-          green: "hsl(var(--neon-green))",
-          cyan: "hsl(var(--neon-cyan))",
-          purple: "hsl(var(--neon-purple))",
         },
         terminal: {
           bg: "hsl(var(--terminal-bg))",

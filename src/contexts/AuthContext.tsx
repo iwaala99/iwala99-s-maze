@@ -40,6 +40,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signUp = async (email: string, password: string, username: string, roles: string[]) => {
     try {
+      // Check if username is already taken BEFORE creating the auth account
+      const { data: existingProfile, error: checkError } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('username', username)
+        .maybeSingle();
+
+      if (checkError) throw checkError;
+      
+      if (existingProfile) {
+        throw new Error('USERNAME_TAKEN');
+      }
+
       const redirectUrl = `${window.location.origin}/`;
       
       const { data, error } = await supabase.auth.signUp({
@@ -61,7 +74,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             username,
           });
 
-        if (profileError) throw profileError;
+        if (profileError) {
+          // If profile creation fails, we should clean up the auth user
+          // but Supabase doesn't allow that from client-side, so just throw
+          throw profileError;
+        }
 
         // Insert selected roles
         if (roles.length > 0) {

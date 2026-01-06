@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { User, LogOut, Shield } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
 
 interface Profile {
   username: string;
@@ -56,10 +56,10 @@ const UserMenu = () => {
       <Button
         variant="ghost"
         onClick={() => navigate('/auth')}
-        className="gap-2 text-primary hover:bg-primary/10"
+        className="gap-2 text-foreground hover:bg-accent"
       >
         <User className="w-4 h-4" />
-        <span className="hidden sm:inline">Join Network</span>
+        <span className="hidden sm:inline text-sm">Join</span>
       </Button>
     );
   }
@@ -78,25 +78,25 @@ const UserMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="gap-2 text-primary hover:bg-primary/10">
-          <Shield className="w-4 h-4" />
-          <span className="hidden sm:inline font-mono">
-            {profile?.username || 'Agent'}
+        <Button variant="ghost" className="gap-2 text-foreground hover:bg-accent">
+          <User className="w-4 h-4" />
+          <span className="hidden sm:inline font-mono text-sm">
+            {profile?.username || 'User'}
           </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="bg-card border-primary/30 backdrop-blur-lg min-w-[200px]"
+        className="bg-card border-border backdrop-blur-sm min-w-[200px]"
       >
         <div className="px-3 py-2">
-          <p className="text-sm font-medium text-primary">{profile?.username}</p>
+          <p className="text-sm font-medium text-foreground">{profile?.username}</p>
           {roles.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {roles.slice(0, 2).map((role) => (
                 <span
                   key={role}
-                  className="text-xs px-2 py-0.5 bg-primary/20 text-primary rounded-full"
+                  className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full"
                 >
                   {formatRole(role)}
                 </span>
@@ -109,7 +109,7 @@ const UserMenu = () => {
             </div>
           )}
         </div>
-        <DropdownMenuSeparator className="bg-primary/20" />
+        <DropdownMenuSeparator className="bg-border" />
         <DropdownMenuItem
           onClick={handleSignOut}
           className="cursor-pointer text-destructive hover:bg-destructive/10 focus:bg-destructive/10"

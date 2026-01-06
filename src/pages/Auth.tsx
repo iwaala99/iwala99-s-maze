@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Shield, Terminal, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -87,7 +87,7 @@ const Auth = () => {
             toast.error(error.message);
           }
         } else {
-          toast.success('Welcome back, agent!');
+          toast.success('Welcome back');
           navigate('/');
         }
       } else {
@@ -106,15 +106,17 @@ const Auth = () => {
 
         const { error } = await signUp(email, password, username, selectedRoles);
         if (error) {
-          if (error.message.includes('already registered')) {
-            toast.error('This email is already registered');
-          } else if (error.message.includes('duplicate key')) {
-            toast.error('This username is already taken');
+          if (error.message === 'USERNAME_TAKEN' || error.message.includes('duplicate key')) {
+            toast.error('This username is already taken. Please choose a different one.');
+            const usernameInput = document.getElementById('username');
+            if (usernameInput) usernameInput.focus();
+          } else if (error.message.includes('already registered')) {
+            toast.error('This email is already registered. Try signing in instead.');
           } else {
             toast.error(error.message);
           }
         } else {
-          toast.success('Account created! Welcome to the network.');
+          toast.success('Account created successfully');
           navigate('/');
         }
       }
@@ -127,29 +129,24 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 matrix-bg" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background" />
+      {/* Subtle background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-background to-background" />
       
       <div className="relative z-10 w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Shield className="w-10 h-10 text-primary animate-glow-pulse" />
-            <Terminal className="w-6 h-6 text-secondary" />
-          </div>
-          <h1 className="font-display text-3xl font-bold text-gradient mb-2">IWALA99</h1>
-          <p className="text-muted-foreground">
-            {isLogin ? 'Access the network' : 'Join the elite network'}
+          <h1 className="font-display text-3xl font-bold text-foreground mb-2 tracking-tight">IWALA99</h1>
+          <p className="text-muted-foreground text-sm">
+            {isLogin ? 'Access the network' : 'Join the network'}
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="terminal-border bg-card/50 backdrop-blur-lg p-8 rounded-lg space-y-6">
+        <form onSubmit={handleSubmit} className="border border-border bg-card/50 backdrop-blur-sm p-8 rounded-lg space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-muted-foreground">
-                Email (private - for login only)
+              <Label htmlFor="email" className="text-muted-foreground text-sm">
+                Email
               </Label>
               <Input
                 id="email"
@@ -157,15 +154,15 @@ const Auth = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="bg-muted/50 border-primary/30 focus:border-primary text-foreground"
+                className="bg-background border-border focus:border-foreground text-foreground"
                 required
               />
             </div>
 
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-muted-foreground">
-                  Username (public - for anonymity)
+                <Label htmlFor="username" className="text-muted-foreground text-sm">
+                  Username (public)
                 </Label>
                 <Input
                   id="username"
@@ -173,14 +170,14 @@ const Auth = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="your_alias"
-                  className="bg-muted/50 border-primary/30 focus:border-primary text-foreground"
+                  className="bg-background border-border focus:border-foreground text-foreground"
                   required
                 />
               </div>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-muted-foreground">Password</Label>
+              <Label htmlFor="password" className="text-muted-foreground text-sm">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -188,13 +185,13 @@ const Auth = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="bg-muted/50 border-primary/30 focus:border-primary text-foreground pr-10"
+                  className="bg-background border-border focus:border-foreground text-foreground pr-10"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -204,7 +201,7 @@ const Auth = () => {
             {/* Role Selection - Only for signup */}
             {!isLogin && (
               <div className="space-y-3">
-                <Label className="text-muted-foreground">Select your role(s)</Label>
+                <Label className="text-muted-foreground text-sm">Select your role(s)</Label>
                 <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2">
                   {cyberRoles.map((role) => {
                     const isSelected = selectedRoles.includes(role.value);
@@ -213,10 +210,10 @@ const Auth = () => {
                         key={role.value}
                         htmlFor={`role-${role.value}`}
                         className={`
-                          flex items-center gap-2 p-2 rounded-md cursor-pointer transition-all duration-300
+                          flex items-center gap-2 p-2 rounded-md cursor-pointer transition-all duration-200
                           ${isSelected
-                            ? 'bg-primary/20 border border-primary/50'
-                            : 'bg-muted/30 border border-transparent hover:border-primary/30'
+                            ? 'bg-foreground/10 border border-foreground/30'
+                            : 'bg-muted/30 border border-transparent hover:border-border'
                           }
                         `}
                       >
@@ -224,7 +221,7 @@ const Auth = () => {
                           id={`role-${role.value}`}
                           checked={isSelected}
                           onCheckedChange={() => handleRoleToggle(role.value)}
-                          className="border-primary/50 data-[state=checked]:bg-primary data-[state=checked]:border-primary pointer-events-none"
+                          className="border-border data-[state=checked]:bg-foreground data-[state=checked]:border-foreground pointer-events-none"
                         />
                         <span className="text-xs text-muted-foreground">
                           {role.label}
@@ -239,15 +236,15 @@ const Auth = () => {
 
           <Button
             type="submit"
-            className="w-full glow-box bg-primary text-primary-foreground hover:bg-primary/90 font-display"
+            className="w-full bg-foreground text-background hover:bg-foreground/90 font-display"
             disabled={isLoading}
           >
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : isLogin ? (
-              '> Access Network'
+              'Sign In'
             ) : (
-              '> Create Account'
+              'Create Account'
             )}
           </Button>
 
@@ -258,9 +255,9 @@ const Auth = () => {
                 setIsLogin(!isLogin);
                 setSelectedRoles([]);
               }}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              {isLogin ? "Don't have an account? Join us" : 'Already a member? Log in'}
+              {isLogin ? "Don't have an account? Sign up" : 'Already a member? Sign in'}
             </button>
           </div>
         </form>
@@ -269,7 +266,7 @@ const Auth = () => {
         <div className="text-center mt-6">
           <button
             onClick={() => navigate('/')}
-            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             ← Back to home
           </button>

@@ -9,10 +9,10 @@ export function Leaderboard() {
 
   if (loading) {
     return (
-      <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
+      <Card className="border-border bg-card">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
-            <Trophy className="h-4 w-4 text-primary" />
+          <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider text-foreground">
+            <Trophy className="h-4 w-4" />
             TOP SOLVERS
           </CardTitle>
         </CardHeader>
@@ -27,10 +27,10 @@ export function Leaderboard() {
 
   if (leaderboard.length === 0) {
     return (
-      <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
+      <Card className="border-border bg-card">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
-            <Trophy className="h-4 w-4 text-primary" />
+          <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider text-foreground">
+            <Trophy className="h-4 w-4" />
             TOP SOLVERS
           </CardTitle>
         </CardHeader>
@@ -50,10 +50,10 @@ export function Leaderboard() {
   ];
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-b from-background to-muted/10">
+    <Card className="border-border bg-card">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider">
-          <Trophy className="h-4 w-4 text-primary" />
+        <CardTitle className="flex items-center gap-2 font-mono text-sm tracking-wider text-foreground">
+          <Trophy className="h-4 w-4" />
           TOP SOLVERS
         </CardTitle>
       </CardHeader>
@@ -63,7 +63,7 @@ export function Leaderboard() {
             key={entry.user_id}
             className={`flex items-center gap-3 p-3 rounded transition-colors ${
               index < 3 
-                ? 'bg-primary/5 border border-primary/10' 
+                ? 'bg-muted/50 border border-border' 
                 : 'hover:bg-muted/30'
             }`}
           >
@@ -83,7 +83,7 @@ export function Leaderboard() {
               </p>
             </div>
             <div className="text-right">
-              <p className="font-mono text-xs font-bold text-primary">
+              <p className="font-mono text-xs font-bold text-foreground">
                 {entry.total_points}
               </p>
             </div>
