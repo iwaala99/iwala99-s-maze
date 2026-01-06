@@ -233,6 +233,18 @@ export default function OmegaRecruitment() {
               <br />
               <span className="text-red-400">You are among the elite few.</span>
             </p>
+            
+            <div className="mt-8 p-6 border border-red-500/20 bg-red-500/5 rounded-lg max-w-xl mx-auto">
+              <p className="font-mono text-xs text-muted-foreground leading-relaxed mb-4">
+                You have proven yourself worthy of consideration by
+              </p>
+              <h2 className="font-mono text-lg text-red-400 mb-2">THE GLOBAL SECURITY INITIATIVE</h2>
+              <p className="font-mono text-xs text-muted-foreground leading-relaxed">
+                An international coalition of elite security professionals working to protect critical infrastructure, 
+                expose corruption, and guide humanity toward a more secure future. Our members operate in the shadows 
+                to defend against threats that governments cannot—or will not—address.
+              </p>
+            </div>
           </div>
 
           {/* Stats */}
@@ -270,9 +282,11 @@ export default function OmegaRecruitment() {
                       APPLICATION RECEIVED
                     </h3>
                     <p className="font-mono text-sm text-muted-foreground mb-6">
-                      Your transmission has been encrypted and logged.
+                      Your transmission has been encrypted and logged by the Initiative.
                       <br />
-                      If you are selected, you will receive contact through secure channels.
+                      If selected, you will receive contact through secure channels within 72 hours.
+                      <br />
+                      <span className="text-red-400 text-xs mt-2 block">Prepare for the next phase.</span>
                     </p>
                     <div className="flex items-center justify-center gap-2 text-xs font-mono text-muted-foreground/50">
                       <Eye className="h-3 w-3" />
@@ -281,16 +295,18 @@ export default function OmegaRecruitment() {
                   </div>
                 ) : (
                   <>
-                    <div className="flex items-center gap-3 mb-8">
+                    <div className="flex items-center gap-3 mb-6">
                       <Shield className="h-5 w-5 text-red-400" />
                       <h3 className="font-mono text-sm tracking-wider text-red-400">
-                        ELITE RECRUITMENT FORM
+                        GLOBAL SECURITY INITIATIVE — RECRUITMENT
                       </h3>
                     </div>
 
                     <p className="font-mono text-xs text-muted-foreground mb-8 leading-relaxed">
-                      Complete this form to be considered for the inner circle.
-                      All transmissions are encrypted. Use a secure handle—not your real identity.
+                      Complete this form to be considered for membership in the Initiative.
+                      Selected candidates will gain access to classified operations, advanced training, 
+                      and the opportunity to shape global security policy. All transmissions are encrypted. 
+                      Use a secure handle—not your real identity.
                     </p>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
