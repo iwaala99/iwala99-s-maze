@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { Shield, Terminal, ChevronDown, Eye } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const HeroSection = () => {
@@ -32,48 +32,43 @@ const HeroSection = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Background effects */}
-      <div className="absolute inset-0 matrix-bg" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
+      {/* Clean background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-background to-background" />
       
-      {/* Animated grid */}
+      {/* Subtle grid */}
       <div 
-        className="absolute inset-0 opacity-10"
+        className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `
-            linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)
+            linear-gradient(hsl(var(--foreground) / 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(var(--foreground) / 0.5) 1px, transparent 1px)
           `,
-          backgroundSize: '50px 50px',
+          backgroundSize: '60px 60px',
         }}
       />
 
       <div className="relative z-10 container mx-auto px-4 text-center">
-        {/* Main logo */}
+        {/* Main content */}
         <div className="mb-8 animate-fade-up">
-          
-          <p className="text-muted-foreground text-lg md:text-xl mb-2">
+          <p className="text-muted-foreground text-lg md:text-xl mb-4 font-light tracking-wide">
             {t('hero.welcome')}
           </p>
           
-          <h1 className="font-display text-5xl md:text-7xl lg:text-9xl font-black mb-4">
-            <span className="text-gradient glow-text">
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight">
+            <span className="text-foreground">
               {typedText}
             </span>
-            <span className="animate-blink text-primary">_</span>
+            <span className="animate-blink text-muted-foreground">_</span>
           </h1>
 
-          {/* Scary Slogan */}
-          <div className="h-12 flex items-center justify-center mb-4">
-            <div className="flex items-center gap-2">
-              <Eye className="w-5 h-5 text-secondary animate-glow-pulse" />
-              <p className="font-mono text-sm md:text-lg text-secondary">
-                We are always watching.
-              </p>
-            </div>
+          {/* Professional tagline */}
+          <div className="h-12 flex items-center justify-center mb-6">
+            <p className="font-mono text-sm md:text-base text-muted-foreground tracking-wider">
+              Intelligence. Precision. Excellence.
+            </p>
           </div>
           
-          <p className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-light">
             {t('hero.tagline')}
           </p>
         </div>
@@ -83,28 +78,28 @@ const HeroSection = () => {
           <Button
             size="lg"
             onClick={scrollToMaze}
-            className="glow-box bg-primary text-primary-foreground hover:bg-primary/90 font-display text-lg px-8 py-6 group"
+            className="bg-foreground text-background hover:bg-foreground/90 font-display text-base px-8 py-6 transition-all duration-300"
           >
-            <span className="group-hover:animate-glitch">Enter the Maze</span>
+            Enter the Maze
           </Button>
           
           <Button
             size="lg"
             variant="outline"
             onClick={() => navigate('/auth')}
-            className="border-secondary text-secondary hover:bg-secondary/10 font-display text-lg px-8 py-6"
+            className="border-border text-foreground hover:bg-accent font-display text-base px-8 py-6"
           >
             {t('hero.join')}
           </Button>
         </div>
 
         {/* Scroll indicator */}
-        <div className="animate-bounce cursor-pointer" onClick={scrollToMaze}>
-          <ChevronDown className="w-8 h-8 text-primary mx-auto" />
+        <div className="animate-bounce cursor-pointer opacity-50 hover:opacity-100 transition-opacity" onClick={scrollToMaze}>
+          <ChevronDown className="w-8 h-8 text-foreground mx-auto" />
         </div>
       </div>
 
-      {/* Decorative elements */}
+      {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   );

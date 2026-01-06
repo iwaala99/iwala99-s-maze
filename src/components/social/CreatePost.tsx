@@ -84,28 +84,28 @@ const CreatePost = ({ onPostCreated }: CreatePostProps) => {
 
   if (!user) {
     return (
-      <div className="terminal-border bg-card/50 backdrop-blur-sm p-6 rounded-lg text-center">
-        <p className="text-muted-foreground">Log in to share with the network</p>
+      <div className="border border-border bg-card/50 backdrop-blur-sm p-6 rounded-lg text-center">
+        <p className="text-muted-foreground text-sm">Log in to share with the network</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="terminal-border bg-card/50 backdrop-blur-sm p-6 rounded-lg space-y-4">
+    <form onSubmit={handleSubmit} className="border border-border bg-card/50 backdrop-blur-sm p-6 rounded-lg space-y-4">
       <Textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Share intel, tools, or start a discussion..."
-        className="bg-muted/50 border-primary/30 focus:border-primary text-foreground min-h-[100px] resize-none"
+        className="bg-muted/50 border-border focus:border-foreground text-foreground min-h-[100px] resize-none"
         maxLength={2000}
       />
       
       <div className="flex items-center justify-between gap-4">
         <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger className="w-[200px] bg-muted/50 border-primary/30">
+          <SelectTrigger className="w-[200px] bg-muted/50 border-border">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
-          <SelectContent className="bg-card border-primary/30">
+          <SelectContent className="bg-card border-border">
             {categories.map((cat) => (
               <SelectItem key={cat.value} value={cat.value}>
                 {cat.label}
@@ -121,7 +121,7 @@ const CreatePost = ({ onPostCreated }: CreatePostProps) => {
           <Button
             type="submit"
             disabled={isLoading || !content.trim()}
-            className="glow-box bg-primary text-primary-foreground hover:bg-primary/90"
+            className="bg-foreground text-background hover:bg-foreground/90"
           >
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
