@@ -75,14 +75,6 @@ const Footer = () => {
           <p className="text-muted-foreground text-sm">
             © {new Date().getFullYear()} IWALA99. {t('footer.rights')}.
           </p>
-          {/* Hidden clue in source */}
-          <p 
-            className="text-primary/50 text-xs mt-2 font-mono"
-            data-transmission="aW5zcGVjdCB0aGUgc291cmNlLCBmaW5kIHRoZSBwYXR0ZXJu"
-          >
-            {'>'} root@iwala99:~# <span className="text-secondary/70">awaiting_operatives</span><span className="animate-blink">_</span>
-          </p>
-          {/* Hidden comment for puzzle hunters: The first clue is in /puzzles. Look for what doesn't belong. */}
         </div>
       </div>
     </footer>
