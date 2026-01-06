@@ -72,7 +72,7 @@ const HeroSection = () => {
             <div className="flex items-center gap-2">
               <Eye className="w-5 h-5 text-secondary animate-glow-pulse" />
               <p className="font-mono text-sm md:text-lg text-secondary">
-                // We are always watching.
+                We are always watching.
               </p>
             </div>
           </div>
