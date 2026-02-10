@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select';
 
 const categories = ['all', 'web', 'crypto', 'forensics', 'pwn', 'reverse', 'misc'];
-const difficulties = ['all', 'easy', 'medium', 'hard', 'insane'];
+const difficulties = ['all', 'easy', 'medium', 'hard', 'insane', 'extreme'];
 
 export default function Puzzles() {
   const navigate = useNavigate();
