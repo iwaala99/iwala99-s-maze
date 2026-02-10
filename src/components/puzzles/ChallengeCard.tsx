@@ -27,6 +27,7 @@ const difficultyConfig: Record<string, { color: string; label: string }> = {
   medium: { color: 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20', label: 'Medium' },
   hard: { color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20', label: 'Hard' },
   insane: { color: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20', label: 'Insane' },
+  extreme: { color: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/40', label: '☠ EXTREME' },
   boss: { color: 'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/40', label: 'FINAL' },
 };
 

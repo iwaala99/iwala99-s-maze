@@ -86,7 +86,7 @@ const Index = () => {
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {challenges.slice(0, 8).map((challenge) => (
+                        {challenges.slice(0, 12).map((challenge) => (
                           <ChallengeCard
                             key={challenge.id}
                             challenge={challenge}

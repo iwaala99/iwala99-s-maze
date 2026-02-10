@@ -37,7 +37,7 @@ const Footer = () => {
                 {t('nav.resources')}
               </a>
               <a 
-                href="https://discord.gg/Rw2nYydFwJ" 
+                href="https://discord.gg/AExstcpQkF" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="block text-muted-foreground hover:text-foreground transition-colors text-sm"
@@ -53,7 +53,7 @@ const Footer = () => {
             
             <div className="flex gap-4">
               <a
-                href="https://discord.gg/Rw2nYydFwJ"
+                href="https://discord.gg/AExstcpQkF"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Discord"

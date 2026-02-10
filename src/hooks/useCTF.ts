@@ -63,20 +63,13 @@ export function useChallenges() {
       userSolvedIds = userSolved?.map(s => s.challenge_id) || [];
     }
 
-    // Get solve counts using secure function
-    const enrichedChallenges = await Promise.all(
-      regularChallenges.map(async (c) => {
-        const { data: countData } = await supabase
-          .rpc('get_challenge_solve_count', { challenge_uuid: c.id });
-        
-        return {
-          ...c,
-          hints: c.hints || [],
-          solved_count: countData || 0,
-          is_solved: userSolvedIds.includes(c.id)
-        };
-      })
-    );
+    // Enrich challenges with solve status (skip individual solve count RPC for performance)
+    const enrichedChallenges = regularChallenges.map((c) => ({
+      ...c,
+      hints: c.hints || [],
+      solved_count: 0,
+      is_solved: userSolvedIds.includes(c.id)
+    }));
 
     // Check if user has completed all insane challenges
     const insaneChallenges = enrichedChallenges.filter(c => c.difficulty === 'insane');
@@ -175,7 +168,7 @@ export function useSubmitFlag() {
     const { data: isCorrect, error: verifyError } = await supabase
       .rpc('verify_flag', { 
         challenge_id: challengeId, 
-        submitted_flag: flag.trim().toLowerCase() 
+        submitted_flag: flag.trim()
       });
 
     if (verifyError) {
