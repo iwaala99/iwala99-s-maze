@@ -80,18 +80,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           throw profileError;
         }
 
-        // Insert selected roles
+        // Assign roles via secure RPC function (bypasses RLS safely)
         if (roles.length > 0) {
-          const roleInserts = roles.map(role => ({
-            user_id: data.user!.id,
-            role: role as any,
-          }));
-
-          const { error: rolesError } = await supabase
-            .from('user_roles')
-            .insert(roleInserts);
-
-          if (rolesError) throw rolesError;
+          for (const role of roles) {
+            const { error: roleError } = await supabase
+              .rpc('assign_user_role', {
+                target_user_id: data.user!.id,
+                new_role: role as any,
+              });
+            if (roleError) throw roleError;
+          }
         }
       }
 
