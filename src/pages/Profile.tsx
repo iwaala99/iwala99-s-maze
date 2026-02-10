@@ -77,13 +77,28 @@ export default function Profile() {
       setLoading(true);
 
       // Fetch profile
-      const { data: profileData, error } = await supabase
+      let { data: profileData, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', targetUserId)
-        .single();
+        .maybeSingle();
 
-      if (error || !profileData) {
+      if (!profileData && isOwnProfile && user) {
+        // Auto-create profile for new users
+        const defaultUsername = user.email?.split('@')[0]?.replace(/[^a-zA-Z0-9_]/g, '_') || 'user';
+        const { data: newProfile, error: insertError } = await supabase
+          .from('profiles')
+          .insert({ id: user.id, username: defaultUsername })
+          .select()
+          .single();
+
+        if (insertError || !newProfile) {
+          toast({ title: 'Failed to create profile', variant: 'destructive' });
+          navigate('/');
+          return;
+        }
+        profileData = newProfile;
+      } else if (!profileData) {
         toast({ title: 'Profile not found', variant: 'destructive' });
         navigate('/');
         return;
