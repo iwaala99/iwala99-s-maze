@@ -17,6 +17,7 @@ import Puzzles from "./pages/Puzzles";
 import Profile from "./pages/Profile";
 import Recruitment from "./pages/Recruitment";
 import OmegaRecruitment from "./pages/OmegaRecruitment";
+import CyberChat from "./pages/CyberChat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ function App() {
                       <Route path="/profile/:userId" element={<Profile />} />
                       <Route path="/r3cru1t" element={<Recruitment />} />
                       <Route path="/0m3g4" element={<OmegaRecruitment />} />
+                      <Route path="/chat" element={<CyberChat />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </BrowserRouter>

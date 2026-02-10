@@ -9,7 +9,7 @@ import UserMenu from './UserMenu';
 import NotificationBell from './NotificationBell';
 import SoundControls from './SoundControls';
 import { ThemeToggle } from './ThemeToggle';
-import { Menu, X, MessageSquare, Mail, Brain, User } from 'lucide-react';
+import { Menu, X, MessageSquare, Mail, Brain, User, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
@@ -45,6 +45,19 @@ const Navbar = () => {
               <Brain className="w-4 h-4" />
               <span>Puzzles</span>
               {location.pathname === '/puzzles' && (
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-foreground" />
+              )}
+            </button>
+
+            <button
+              onClick={() => navigate('/chat')}
+              className={`flex items-center gap-2 transition-colors duration-200 relative text-sm ${
+                location.pathname === '/chat' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Bot className="w-4 h-4" />
+              <span>AI Chat</span>
+              {location.pathname === '/chat' && (
                 <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-foreground" />
               )}
             </button>
@@ -152,6 +165,19 @@ const Navbar = () => {
             >
               <MessageSquare className="w-4 h-4" />
               <span>Feed</span>
+            </button>
+
+            <button
+              onClick={() => {
+                navigate('/chat');
+                setIsOpen(false);
+              }}
+              className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-200 text-sm ${
+                location.pathname === '/chat' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Bot className="w-4 h-4" />
+              <span>AI Chat</span>
             </button>
 
             <button
