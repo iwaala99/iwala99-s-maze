@@ -584,6 +584,10 @@ export type Database = {
         Args: { challenge_uuid: string }
         Returns: number
       }
+      get_user_conversation_ids: {
+        Args: { p_user_id: string }
+        Returns: string[]
+      }
       verify_flag: {
         Args: { challenge_id: string; submitted_flag: string }
         Returns: boolean
