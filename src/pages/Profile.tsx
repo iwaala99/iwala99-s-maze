@@ -133,9 +133,12 @@ export default function Profile() {
   const handleSaveBio = async () => {
     if (!user) return;
 
+    // Client-side validation
+    const sanitized = editBio.trim().replace(/<[^>]+>/g, '').slice(0, 500);
+
     const { error } = await supabase
       .from('profiles')
-      .update({ bio: editBio })
+      .update({ bio: sanitized })
       .eq('id', user.id);
 
     if (error) {
@@ -143,7 +146,7 @@ export default function Profile() {
       return;
     }
 
-    setProfile(prev => prev ? { ...prev, bio: editBio } : null);
+    setProfile(prev => prev ? { ...prev, bio: sanitized } : null);
     setEditing(false);
     toast({ title: 'Bio updated' });
   };
