@@ -165,10 +165,10 @@ const CyberChat = () => {
             </SelectTrigger>
             <SelectContent className="bg-card border-border">
               <SelectItem value="lovable">
-                <span className="flex items-center gap-2"><Sparkles className="w-3 h-3" /> Lovable AI</span>
+                <span className="flex items-center gap-2"><Sparkles className="w-3 h-3" /> PHANTOM-7</span>
               </SelectItem>
               <SelectItem value="blackbox">
-                <span className="flex items-center gap-2"><Bot className="w-3 h-3" /> BlackBox AI</span>
+                <span className="flex items-center gap-2"><Bot className="w-3 h-3" /> SPECTER-X</span>
               </SelectItem>
             </SelectContent>
           </Select>
