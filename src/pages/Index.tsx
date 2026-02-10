@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import MatrixRain from '@/components/MatrixRain';
 import HeroSection from '@/components/HeroSection';
@@ -6,10 +7,12 @@ import Footer from '@/components/Footer';
 import SocialFeed from '@/components/social/SocialFeed';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
-import { MessageSquare, Users } from 'lucide-react';
+import { Users, Brain, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = 'IWALA99 | Cybersecurity Community Hub';
@@ -27,6 +30,36 @@ const Index = () => {
       <main>
         <HeroSection />
         <SecurityBanner />
+
+        {/* Maze CTA Section */}
+        <section className="py-12 relative z-10">
+          <div className="container mx-auto px-4">
+            <div className="relative overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-r from-primary/5 via-background to-secondary/5 p-8 md:p-12 text-center">
+              <div className="absolute inset-0 opacity-[0.03]" style={{
+                backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--foreground) / 0.1) 2px, hsl(var(--foreground) / 0.1) 4px)',
+              }} />
+              <div className="relative z-10">
+                <Brain className="h-10 w-10 mx-auto mb-4 text-primary animate-pulse" />
+                <h2 className="text-2xl md:text-3xl font-bold font-mono mb-3">
+                  <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                    ENTER THE MAZE
+                  </span>
+                </h2>
+                <p className="text-muted-foreground font-mono text-sm max-w-md mx-auto mb-6">
+                  Solve puzzles. Prove your worth. Only the exceptional will find what lies at the end.
+                </p>
+                <Button
+                  size="lg"
+                  onClick={() => navigate('/puzzles')}
+                  className="bg-foreground text-background hover:bg-foreground/90 font-mono px-8 gap-2"
+                >
+                  Start the Challenge
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
         
         {/* Social Feed Section */}
         <section className="py-16 relative z-10">

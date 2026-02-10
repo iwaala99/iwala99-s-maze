@@ -77,7 +77,7 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up" style={{ animationDelay: '0.3s' }}>
           <Button
             size="lg"
-            onClick={scrollToMaze}
+            onClick={() => navigate('/puzzles')}
             className="bg-foreground text-background hover:bg-foreground/90 font-display text-base px-8 py-6 transition-all duration-300"
           >
             Enter the Maze
@@ -94,7 +94,7 @@ const HeroSection = () => {
         </div>
 
         {/* Scroll indicator */}
-        <div className="animate-bounce cursor-pointer opacity-50 hover:opacity-100 transition-opacity" onClick={scrollToMaze}>
+        <div className="animate-bounce cursor-pointer opacity-50 hover:opacity-100 transition-opacity" onClick={() => navigate('/puzzles')}>
           <ChevronDown className="w-8 h-8 text-foreground mx-auto" />
         </div>
       </div>
