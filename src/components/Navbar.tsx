@@ -30,40 +30,42 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/60 transition-all duration-300">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <button 
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+            className="flex items-center gap-2 hover:opacity-70 transition-opacity duration-200"
           >
-            <span className="font-display font-bold text-xl text-foreground tracking-tight">
+            <span className="font-display font-bold text-lg text-foreground tracking-tight">
               IWALA99
             </span>
           </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {navItems.map(({ path, label, icon: Icon, badge }) => (
               <button
                 key={path}
                 onClick={() => navigate(path)}
-                className={`flex items-center gap-2 transition-colors duration-200 relative text-sm ${
-                  location.pathname === path ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                className={`flex items-center gap-2 relative text-sm py-1 transition-colors duration-200 ${
+                  location.pathname === path 
+                    ? 'text-foreground' 
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <div className="relative">
                   <Icon className="w-4 h-4" />
                   {badge != null && badge > 0 && (
-                    <span className="absolute -top-2 -right-2 w-4 h-4 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-destructive text-destructive-foreground text-[9px] font-bold rounded-full flex items-center justify-center">
                       {badge > 9 ? '9+' : badge}
                     </span>
                   )}
                 </div>
-                <span>{label}</span>
+                <span className="font-medium">{label}</span>
                 {location.pathname === path && (
-                  <span className={`absolute -bottom-1 ${isRTL ? 'right-0' : 'left-0'} w-full h-0.5 bg-foreground`} />
+                  <span className={`absolute -bottom-[17px] ${isRTL ? 'right-0' : 'left-0'} w-full h-[2px] bg-foreground rounded-full transition-all duration-300`} />
                 )}
               </button>
             ))}
@@ -71,21 +73,23 @@ const Navbar = () => {
             {user && (
               <button
                 onClick={() => navigate('/profile')}
-                className={`flex items-center gap-2 transition-colors duration-200 relative text-sm ${
-                  location.pathname.startsWith('/profile') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                className={`flex items-center gap-2 relative text-sm py-1 transition-colors duration-200 ${
+                  location.pathname.startsWith('/profile') 
+                    ? 'text-foreground' 
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <User className="w-4 h-4" />
-                <span>{t('nav.profile')}</span>
+                <span className="font-medium">{t('nav.profile')}</span>
                 {location.pathname.startsWith('/profile') && (
-                  <span className={`absolute -bottom-1 ${isRTL ? 'right-0' : 'left-0'} w-full h-0.5 bg-foreground`} />
+                  <span className={`absolute -bottom-[17px] ${isRTL ? 'right-0' : 'left-0'} w-full h-[2px] bg-foreground rounded-full transition-all duration-300`} />
                 )}
               </button>
             )}
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <div className="hidden lg:block">
               <CompactTime />
             </div>
@@ -99,7 +103,7 @@ const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden text-foreground"
+              className="md:hidden text-foreground h-9 w-9"
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -109,8 +113,8 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-border animate-fade-up">
-            <div className="mb-4">
+          <div className="md:hidden py-3 border-t border-border/60 animate-fade-up space-y-1">
+            <div className="mb-3 pb-3 border-b border-border/40">
               <CompactTime />
             </div>
             
@@ -121,19 +125,21 @@ const Navbar = () => {
                   navigate(path);
                   setIsOpen(false);
                 }}
-                className={`flex items-center gap-2 w-full text-${isRTL ? 'right' : 'left'} py-3 transition-colors duration-200 text-sm ${
-                  location.pathname === path ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-sm transition-all duration-200 ${
+                  location.pathname === path 
+                    ? 'text-foreground bg-accent' 
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}
               >
                 <div className="relative">
                   <Icon className="w-4 h-4" />
                   {badge != null && badge > 0 && (
-                    <span className="absolute -top-2 -right-2 w-4 h-4 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-destructive text-destructive-foreground text-[9px] font-bold rounded-full flex items-center justify-center">
                       {badge > 9 ? '9+' : badge}
                     </span>
                   )}
                 </div>
-                <span>{label}</span>
+                <span className="font-medium">{label}</span>
               </button>
             ))}
 
@@ -143,12 +149,14 @@ const Navbar = () => {
                   navigate('/profile');
                   setIsOpen(false);
                 }}
-                className={`flex items-center gap-2 w-full text-${isRTL ? 'right' : 'left'} py-3 transition-colors duration-200 text-sm ${
-                  location.pathname.startsWith('/profile') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-sm transition-all duration-200 ${
+                  location.pathname.startsWith('/profile') 
+                    ? 'text-foreground bg-accent' 
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}
               >
                 <User className="w-4 h-4" />
-                <span>{t('nav.profile')}</span>
+                <span className="font-medium">{t('nav.profile')}</span>
               </button>
             )}
           </div>

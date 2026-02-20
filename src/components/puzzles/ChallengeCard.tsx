@@ -84,7 +84,7 @@ export function ChallengeCard({ challenge, onSolved }: ChallengeCardProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Card className={`
-          cursor-pointer transition-all hover:shadow-md
+          cursor-pointer card-hover
           ${challenge.is_solved 
             ? 'border-secondary/40 bg-secondary/5' 
             : 'hover:border-primary/40'
