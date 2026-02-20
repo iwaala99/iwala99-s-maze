@@ -126,8 +126,8 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
   };
 
   return (
-    <div className="terminal-border bg-card/50 backdrop-blur-sm rounded-lg overflow-hidden hover:glow-box transition-all duration-300">
-      <div className="p-6">
+    <div className="terminal-border card-hover bg-card/50 backdrop-blur-sm rounded-lg overflow-hidden">
+      <div className="p-5 sm:p-6">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">

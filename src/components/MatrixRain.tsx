@@ -18,17 +18,24 @@ const MatrixRain = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const chars = 'IWALA99アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    // Use theme-aware colors - subtle monochrome rain
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    const chars = 'IWALA99アイウエオカキクケコ0123456789ABCDEF';
     const charArray = chars.split('');
     const fontSize = 14;
     const columns = Math.floor(canvas.width / fontSize);
     const drops: number[] = new Array(columns).fill(1);
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(5, 10, 15, 0.05)';
+      const isDarkNow = document.documentElement.classList.contains('dark');
+      
+      // Very subtle background fade
+      ctx.fillStyle = isDarkNow 
+        ? 'rgba(10, 13, 18, 0.06)' 
+        : 'rgba(252, 252, 253, 0.06)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = '#00FF41';
       ctx.font = `${fontSize}px JetBrains Mono`;
 
       for (let i = 0; i < drops.length; i++) {
@@ -36,17 +43,21 @@ const MatrixRain = () => {
         const x = i * fontSize;
         const y = drops[i] * fontSize;
 
-        ctx.fillStyle = `rgba(0, 255, 65, ${Math.random() * 0.5 + 0.5})`;
+        // Theme-aware color: muted foreground tone
+        const alpha = Math.random() * 0.3 + 0.1;
+        ctx.fillStyle = isDarkNow 
+          ? `rgba(140, 150, 165, ${alpha})`
+          : `rgba(80, 90, 110, ${alpha})`;
         ctx.fillText(text, x, y);
 
-        if (y > canvas.height && Math.random() > 0.975) {
+        if (y > canvas.height && Math.random() > 0.98) {
           drops[i] = 0;
         }
         drops[i]++;
       }
     };
 
-    const interval = setInterval(draw, 35);
+    const interval = setInterval(draw, 45);
 
     return () => {
       clearInterval(interval);
@@ -57,7 +68,7 @@ const MatrixRain = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none opacity-30"
+      className="fixed inset-0 pointer-events-none opacity-20 transition-opacity duration-700"
       style={{ zIndex: 0 }}
     />
   );
