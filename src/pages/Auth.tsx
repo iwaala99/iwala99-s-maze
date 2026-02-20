@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,16 +11,16 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const cyberRoles = [
-  { value: 'ethical_hacker', label: 'Ethical Hacker', labelAr: 'هاكر أخلاقي' },
-  { value: 'soc_analyst', label: 'SOC Analyst', labelAr: 'محلل SOC' },
-  { value: 'penetration_tester', label: 'Penetration Tester', labelAr: 'مختبر الاختراق' },
-  { value: 'security_engineer', label: 'Security Engineer', labelAr: 'مهندس أمني' },
-  { value: 'threat_hunter', label: 'Threat Hunter', labelAr: 'صياد التهديدات' },
-  { value: 'incident_responder', label: 'Incident Responder', labelAr: 'مستجيب الحوادث' },
-  { value: 'security_architect', label: 'Security Architect', labelAr: 'مهندس معماري أمني' },
-  { value: 'malware_analyst', label: 'Malware Analyst', labelAr: 'محلل البرمجيات الخبيثة' },
-  { value: 'network_security', label: 'Network Security', labelAr: 'أمن الشبكات' },
-  { value: 'digital_forensics', label: 'Digital Forensics', labelAr: 'الطب الشرعي الرقمي' },
+  { value: 'ethical_hacker', label: 'Ethical Hacker', labelAr: 'هاكر أخلاقي', labelDarija: 'هاكر أخلاقي' },
+  { value: 'soc_analyst', label: 'SOC Analyst', labelAr: 'محلل SOC', labelDarija: 'محلل SOC' },
+  { value: 'penetration_tester', label: 'Penetration Tester', labelAr: 'مختبر الاختراق', labelDarija: 'مختبر الاختراق' },
+  { value: 'security_engineer', label: 'Security Engineer', labelAr: 'مهندس أمني', labelDarija: 'مهندس أمني' },
+  { value: 'threat_hunter', label: 'Threat Hunter', labelAr: 'صياد التهديدات', labelDarija: 'صياد التهديدات' },
+  { value: 'incident_responder', label: 'Incident Responder', labelAr: 'مستجيب الحوادث', labelDarija: 'مستجيب الحوادث' },
+  { value: 'security_architect', label: 'Security Architect', labelAr: 'مهندس معماري أمني', labelDarija: 'مهندس معماري أمني' },
+  { value: 'malware_analyst', label: 'Malware Analyst', labelAr: 'محلل البرمجيات الخبيثة', labelDarija: 'محلل البرمجيات الخبيثة' },
+  { value: 'network_security', label: 'Network Security', labelAr: 'أمن الشبكات', labelDarija: 'أمن الشبكات' },
+  { value: 'digital_forensics', label: 'Digital Forensics', labelAr: 'الطب الشرعي الرقمي', labelDarija: 'الطب الشرعي الرقمي' },
 ];
 
 const signUpSchema = z.object({
@@ -51,6 +52,7 @@ const Auth = () => {
   
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
+  const { t, language, isRTL } = useLanguage();
 
   useEffect(() => {
     if (user) {
@@ -64,6 +66,12 @@ const Auth = () => {
         ? prev.filter(r => r !== role)
         : [...prev, role]
     );
+  };
+
+  const getRoleLabel = (role: typeof cyberRoles[0]) => {
+    if (language === 'ar') return role.labelAr;
+    if (language === 'darija') return role.labelDarija;
+    return role.label;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -137,7 +145,7 @@ const Auth = () => {
         <div className="text-center mb-8">
           <h1 className="font-display text-3xl font-bold text-foreground mb-2 tracking-tight">IWALA99</h1>
           <p className="text-muted-foreground text-sm">
-            {isLogin ? 'Access the network' : 'Join the network'}
+            {isLogin ? t('auth.accessNetwork') : t('auth.joinNetwork')}
           </p>
         </div>
 
@@ -146,7 +154,7 @@ const Auth = () => {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-muted-foreground text-sm">
-                Email
+                {t('auth.email')}
               </Label>
               <Input
                 id="email"
@@ -156,13 +164,14 @@ const Auth = () => {
                 placeholder="your@email.com"
                 className="bg-background border-border focus:border-foreground text-foreground"
                 required
+                dir="ltr"
               />
             </div>
 
             {!isLogin && (
               <div className="space-y-2">
                 <Label htmlFor="username" className="text-muted-foreground text-sm">
-                  Username (public)
+                  {t('auth.username')}
                 </Label>
                 <Input
                   id="username"
@@ -172,12 +181,13 @@ const Auth = () => {
                   placeholder="your_alias"
                   className="bg-background border-border focus:border-foreground text-foreground"
                   required
+                  dir="ltr"
                 />
               </div>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-muted-foreground text-sm">Password</Label>
+              <Label htmlFor="password" className="text-muted-foreground text-sm">{t('auth.password')}</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -185,13 +195,14 @@ const Auth = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="bg-background border-border focus:border-foreground text-foreground pr-10"
+                  className={`bg-background border-border focus:border-foreground text-foreground ${isRTL ? 'pl-10' : 'pr-10'}`}
                   required
+                  dir="ltr"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className={`absolute ${isRTL ? 'left-3' : 'right-3'} top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors`}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -201,7 +212,7 @@ const Auth = () => {
             {/* Role Selection - Only for signup */}
             {!isLogin && (
               <div className="space-y-3">
-                <Label className="text-muted-foreground text-sm">Select your role(s)</Label>
+                <Label className="text-muted-foreground text-sm">{t('auth.selectRoles')}</Label>
                 <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2">
                   {cyberRoles.map((role) => {
                     const isSelected = selectedRoles.includes(role.value);
@@ -224,7 +235,7 @@ const Auth = () => {
                           className="border-border data-[state=checked]:bg-foreground data-[state=checked]:border-foreground pointer-events-none"
                         />
                         <span className="text-xs text-muted-foreground">
-                          {role.label}
+                          {getRoleLabel(role)}
                         </span>
                       </label>
                     );
@@ -242,9 +253,9 @@ const Auth = () => {
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : isLogin ? (
-              'Sign In'
+              t('auth.signIn')
             ) : (
-              'Create Account'
+              t('auth.signUp')
             )}
           </Button>
 
@@ -257,7 +268,7 @@ const Auth = () => {
               }}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              {isLogin ? "Don't have an account? Sign up" : 'Already a member? Sign in'}
+              {isLogin ? t('auth.noAccount') : t('auth.hasAccount')}
             </button>
           </div>
         </form>
@@ -268,7 +279,7 @@ const Auth = () => {
             onClick={() => navigate('/')}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Back to home
+            {t('auth.backHome')}
           </button>
         </div>
       </div>

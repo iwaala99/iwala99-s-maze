@@ -23,13 +23,6 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const scrollToMaze = () => {
-    const element = document.querySelector('#maze');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       {/* Clean background */}
@@ -64,7 +57,7 @@ const HeroSection = () => {
           {/* Professional tagline */}
           <div className="h-12 flex items-center justify-center mb-6">
             <p className="font-mono text-sm md:text-base text-muted-foreground tracking-wider">
-              Intelligence. Precision. Excellence.
+              {t('hero.subtitle')}
             </p>
           </div>
           
@@ -80,7 +73,7 @@ const HeroSection = () => {
             onClick={() => navigate('/puzzles')}
             className="bg-foreground text-background hover:bg-foreground/90 font-display text-base px-8 py-6 transition-all duration-300"
           >
-            Enter the Maze
+            {t('hero.enterMaze')}
           </Button>
           
           <Button

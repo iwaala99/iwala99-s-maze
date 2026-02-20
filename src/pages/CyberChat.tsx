@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -90,6 +91,7 @@ async function streamChat({
 
 const CyberChat = () => {
   const { user } = useAuth();
+  const { t, isRTL } = useLanguage();
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -156,6 +158,8 @@ const CyberChat = () => {
     setMessages([]);
   };
 
+  const suggestedPrompts = [t('chat.prompt1'), t('chat.prompt2'), t('chat.prompt3')];
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
@@ -167,8 +171,8 @@ const CyberChat = () => {
               <Shield className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">CyberGuard AI</h1>
-              <p className="text-xs text-muted-foreground">Cybersecurity assistant & CTF mentor</p>
+              <h1 className="text-xl font-bold text-foreground">{t('chat.title')}</h1>
+              <p className="text-xs text-muted-foreground">{t('chat.subtitle')}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -178,7 +182,7 @@ const CyberChat = () => {
                 size="icon"
                 onClick={clearChat}
                 className="text-muted-foreground hover:text-destructive"
-                title="Clear chat"
+                title={t('chat.clearChat')}
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -208,13 +212,13 @@ const CyberChat = () => {
             <div className="flex flex-col items-center justify-center h-full text-center gap-4 py-12">
               <Shield className="w-12 h-12 text-muted-foreground/40" />
               <div>
-                <p className="text-muted-foreground font-medium">Welcome, Operative.</p>
+                <p className="text-muted-foreground font-medium">{t('chat.welcome')}</p>
                 <p className="text-muted-foreground/60 text-sm mt-1">
-                  Ask about cybersecurity, CTF hints, tools, or career guidance.
+                  {t('chat.welcomeDesc')}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 justify-center mt-2">
-                {['How do I start with CTF?', 'Explain SQL injection', 'nmap scanning tips'].map(q => (
+                {suggestedPrompts.map(q => (
                   <button
                     key={q}
                     onClick={() => { setInput(q); }}
@@ -228,7 +232,7 @@ const CyberChat = () => {
           )}
 
           {messages.map((msg, i) => (
-            <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={i} className={`flex gap-3 ${msg.role === 'user' ? (isRTL ? 'justify-start' : 'justify-end') : (isRTL ? 'justify-end' : 'justify-start')}`}>
               {msg.role === 'assistant' && (
                 <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
                   <Bot className="w-4 h-4 text-primary" />
@@ -273,9 +277,10 @@ const CyberChat = () => {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about cybersecurity, CTF hints, tools..."
+            placeholder={t('chat.placeholder')}
             className="bg-muted/50 border-border focus:border-foreground text-foreground resize-none min-h-[48px] max-h-[120px]"
             rows={1}
+            dir="auto"
           />
           <Button
             onClick={send}
