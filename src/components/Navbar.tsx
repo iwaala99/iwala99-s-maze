@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import CompactTime from './CompactTime';
 import UserMenu from './UserMenu';
@@ -19,6 +20,14 @@ const Navbar = () => {
   const location = useLocation();
   const { unreadCount } = useUnreadMessages();
   const { user } = useAuth();
+  const { t, isRTL } = useLanguage();
+
+  const navItems = [
+    { path: '/puzzles', label: t('nav.puzzles'), icon: Brain },
+    { path: '/chat', label: t('nav.aiChat'), icon: Bot },
+    { path: '/feed', label: t('nav.feed'), icon: MessageSquare },
+    { path: '/messages', label: t('nav.messages'), icon: Mail, badge: unreadCount },
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -36,64 +45,28 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <button
-              onClick={() => navigate('/puzzles')}
-              className={`flex items-center gap-2 transition-colors duration-200 relative text-sm ${
-                location.pathname === '/puzzles' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Brain className="w-4 h-4" />
-              <span>Puzzles</span>
-              {location.pathname === '/puzzles' && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-foreground" />
-              )}
-            </button>
-
-            <button
-              onClick={() => navigate('/chat')}
-              className={`flex items-center gap-2 transition-colors duration-200 relative text-sm ${
-                location.pathname === '/chat' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Bot className="w-4 h-4" />
-              <span>AI Chat</span>
-              {location.pathname === '/chat' && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-foreground" />
-              )}
-            </button>
-
-            <button
-              onClick={() => navigate('/feed')}
-              className={`flex items-center gap-2 transition-colors duration-200 relative text-sm ${
-                location.pathname === '/feed' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Feed</span>
-              {location.pathname === '/feed' && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-foreground" />
-              )}
-            </button>
-
-            <button
-              onClick={() => navigate('/messages')}
-              className={`flex items-center gap-2 transition-colors duration-200 relative text-sm ${
-                location.pathname === '/messages' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <div className="relative">
-                <Mail className="w-4 h-4" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </span>
+            {navItems.map(({ path, label, icon: Icon, badge }) => (
+              <button
+                key={path}
+                onClick={() => navigate(path)}
+                className={`flex items-center gap-2 transition-colors duration-200 relative text-sm ${
+                  location.pathname === path ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <div className="relative">
+                  <Icon className="w-4 h-4" />
+                  {badge != null && badge > 0 && (
+                    <span className="absolute -top-2 -right-2 w-4 h-4 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                      {badge > 9 ? '9+' : badge}
+                    </span>
+                  )}
+                </div>
+                <span>{label}</span>
+                {location.pathname === path && (
+                  <span className={`absolute -bottom-1 ${isRTL ? 'right-0' : 'left-0'} w-full h-0.5 bg-foreground`} />
                 )}
-              </div>
-              <span>Messages</span>
-              {location.pathname === '/messages' && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-foreground" />
-              )}
-            </button>
+              </button>
+            ))}
 
             {user && (
               <button
@@ -103,9 +76,9 @@ const Navbar = () => {
                 }`}
               >
                 <User className="w-4 h-4" />
-                <span>Profile</span>
+                <span>{t('nav.profile')}</span>
                 {location.pathname.startsWith('/profile') && (
-                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-foreground" />
+                  <span className={`absolute -bottom-1 ${isRTL ? 'right-0' : 'left-0'} w-full h-0.5 bg-foreground`} />
                 )}
               </button>
             )}
@@ -141,64 +114,28 @@ const Navbar = () => {
               <CompactTime />
             </div>
             
-            <button
-              onClick={() => {
-                navigate('/puzzles');
-                setIsOpen(false);
-              }}
-              className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-200 text-sm ${
-                location.pathname === '/puzzles' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Brain className="w-4 h-4" />
-              <span>Puzzles</span>
-            </button>
-
-            <button
-              onClick={() => {
-                navigate('/feed');
-                setIsOpen(false);
-              }}
-              className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-200 text-sm ${
-                location.pathname === '/feed' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Feed</span>
-            </button>
-
-            <button
-              onClick={() => {
-                navigate('/chat');
-                setIsOpen(false);
-              }}
-              className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-200 text-sm ${
-                location.pathname === '/chat' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Bot className="w-4 h-4" />
-              <span>AI Chat</span>
-            </button>
-
-            <button
-              onClick={() => {
-                navigate('/messages');
-                setIsOpen(false);
-              }}
-              className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-200 text-sm ${
-                location.pathname === '/messages' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <div className="relative">
-                <Mail className="w-4 h-4" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </span>
-                )}
-              </div>
-              <span>Messages</span>
-            </button>
+            {navItems.map(({ path, label, icon: Icon, badge }) => (
+              <button
+                key={path}
+                onClick={() => {
+                  navigate(path);
+                  setIsOpen(false);
+                }}
+                className={`flex items-center gap-2 w-full text-${isRTL ? 'right' : 'left'} py-3 transition-colors duration-200 text-sm ${
+                  location.pathname === path ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <div className="relative">
+                  <Icon className="w-4 h-4" />
+                  {badge != null && badge > 0 && (
+                    <span className="absolute -top-2 -right-2 w-4 h-4 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                      {badge > 9 ? '9+' : badge}
+                    </span>
+                  )}
+                </div>
+                <span>{label}</span>
+              </button>
+            ))}
 
             {user && (
               <button
@@ -206,12 +143,12 @@ const Navbar = () => {
                   navigate('/profile');
                   setIsOpen(false);
                 }}
-                className={`flex items-center gap-2 w-full text-left py-3 transition-colors duration-200 text-sm ${
+                className={`flex items-center gap-2 w-full text-${isRTL ? 'right' : 'left'} py-3 transition-colors duration-200 text-sm ${
                   location.pathname.startsWith('/profile') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <User className="w-4 h-4" />
-                <span>Profile</span>
+                <span>{t('nav.profile')}</span>
               </button>
             )}
           </div>

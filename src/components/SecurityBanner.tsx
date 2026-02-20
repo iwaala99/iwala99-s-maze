@@ -1,6 +1,9 @@
 import { Shield, Lock, Database, Globe } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SecurityBanner = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-background via-primary/5 to-background border-y border-primary/20">
       {/* Animated lines */}
@@ -11,39 +14,35 @@ const SecurityBanner = () => {
 
       <div className="container mx-auto px-4 py-4">
         <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
-          {/* HTTPS/TLS */}
           <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/30 rounded-md border border-primary/20">
             <Lock className="w-4 h-4 text-primary" />
             <span className="font-mono text-xs text-muted-foreground">HTTPS</span>
             <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-secondary/20 text-secondary">
-              SECURED
+              {t('security.secured')}
             </span>
           </div>
 
-          {/* RLS Protection */}
           <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/30 rounded-md border border-primary/20">
             <Database className="w-4 h-4 text-primary" />
             <span className="font-mono text-xs text-muted-foreground">RLS</span>
             <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-secondary/20 text-secondary">
-              ENABLED
+              {t('security.enabled')}
             </span>
           </div>
 
-          {/* Auth */}
           <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/30 rounded-md border border-primary/20">
             <Shield className="w-4 h-4 text-primary" />
             <span className="font-mono text-xs text-muted-foreground">AUTH</span>
             <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-secondary/20 text-secondary">
-              PROTECTED
+              {t('security.protected')}
             </span>
           </div>
 
-          {/* Realtime */}
           <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/30 rounded-md border border-primary/20">
             <Globe className="w-4 h-4 text-primary" />
             <span className="font-mono text-xs text-muted-foreground">WSS</span>
             <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-secondary/20 text-secondary">
-              REALTIME
+              {t('security.realtime')}
             </span>
           </div>
         </div>

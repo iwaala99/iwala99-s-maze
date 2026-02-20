@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { useConversations, useMessages } from '@/hooks/useMessages';
 import { useUnreadMessages } from '@/hooks/useUnreadMessages';
@@ -14,6 +15,7 @@ import { Button } from '@/components/ui/button';
 const Messages = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const { conversations, loading: convLoading, refetch } = useConversations();
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const { messages, loading: msgLoading, sendMessage } = useMessages(selectedConversation);
@@ -68,11 +70,11 @@ const Messages = () => {
         <div className="container mx-auto px-4 h-[calc(100vh-12rem)]">
           <div className="flex items-center gap-3 mb-6">
             <MessageSquare className="w-8 h-8 text-primary" />
-            <h1 className="text-2xl font-bold text-foreground font-display">Messages</h1>
+            <h1 className="text-2xl font-bold text-foreground font-display">{t('messages.title')}</h1>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100%-4rem)]">
-            {/* Conversation List - Hidden on mobile when thread is open */}
+            {/* Conversation List */}
             <div className={`md:col-span-1 bg-card rounded-xl border border-border overflow-hidden ${showMobileThread ? 'hidden md:block' : ''}`}>
               <UserSearch onConversationStarted={handleConversationStarted} />
               <div className="h-[calc(100%-5rem)]">
@@ -96,8 +98,8 @@ const Messages = () => {
                       size="sm"
                       onClick={() => setShowMobileThread(false)}
                     >
-                      <ArrowLeft className="w-4 h-4 mr-2" />
-                      Back
+                      <ArrowLeft className="w-4 h-4 me-2" />
+                      {t('messages.back')}
                     </Button>
                   </div>
                   <div className="h-full md:h-full" style={{ height: showMobileThread ? 'calc(100% - 3rem)' : '100%' }}>
@@ -114,8 +116,8 @@ const Messages = () => {
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                   <MessageSquare className="w-16 h-16 mb-4 opacity-50" />
-                  <p className="text-lg">Select a conversation</p>
-                  <p className="text-sm">Or search for a user to start chatting</p>
+                  <p className="text-lg">{t('messages.selectConversation')}</p>
+                  <p className="text-sm">{t('messages.searchUser')}</p>
                 </div>
               )}
             </div>

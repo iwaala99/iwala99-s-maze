@@ -60,7 +60,7 @@ const Footer = () => {
                 className="flex items-center gap-2 px-4 py-2 border border-border rounded-md text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all duration-300 text-sm"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span className="font-medium">Join Discord</span>
+                <span className="font-medium">{t('footer.joinDiscord')}</span>
               </a>
             </div>
           </div>

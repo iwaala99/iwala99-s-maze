@@ -597,3 +597,49 @@
 .clip-glitch {
   clip-path: inset(0 0 0 0);
 }
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .font-mono {
+  font-family: 'JetBrains Mono', 'Tahoma', monospace;
+}
+
+[dir="rtl"] .font-display {
+  font-family: 'Tahoma', 'Inter', sans-serif;
+}
+
+[dir="rtl"] .tracking-tight {
+  letter-spacing: 0;
+}
+
+[dir="rtl"] .tracking-wide,
+[dir="rtl"] .tracking-wider,
+[dir="rtl"] .tracking-widest {
+  letter-spacing: 0;
+}
+
+/* Logical properties for RTL spacing */
+[dir="rtl"] .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+[dir="rtl"] .ml-auto { margin-left: 0; margin-right: auto; }
+
+/* Flip icons that indicate direction */
+[dir="rtl"] .lucide-arrow-right,
+[dir="rtl"] .lucide-arrow-left,
+[dir="rtl"] .lucide-chevron-right,
+[dir="rtl"] .lucide-chevron-left {
+  transform: scaleX(-1);
+}
+
+/* RTL prose adjustments */
+[dir="rtl"] .prose {
+  text-align: right;
+}
+
+[dir="rtl"] .prose pre,
+[dir="rtl"] .prose code {
+  direction: ltr;
+  text-align: left;
+}

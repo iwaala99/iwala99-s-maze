@@ -3,8 +3,11 @@ import MatrixRain from '@/components/MatrixRain';
 import SocialFeed from '@/components/social/SocialFeed';
 import { Shield, Users } from 'lucide-react';
 import { useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Feed = () => {
+  const { t } = useLanguage();
+
   useEffect(() => {
     document.title = 'IWALA99 | Cyber Feed';
   }, []);
@@ -23,10 +26,10 @@ const Feed = () => {
               <Shield className="w-6 h-6 text-secondary" />
             </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-gradient mb-2">
-              Cyber Feed
+              {t('feed.title')}
             </h1>
             <p className="text-muted-foreground">
-              Share intel, tools, and connect with the network
+              {t('feed.subtitle')}
             </p>
           </div>
 
