@@ -6,8 +6,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Send, Loader2, Bot, User, Shield, Sparkles } from 'lucide-react';
+import { Send, Loader2, Bot, User, Shield, Sparkles, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import ReactMarkdown from 'react-markdown';
 import {
   Select,
   SelectContent,
@@ -151,6 +152,10 @@ const CyberChat = () => {
     }
   };
 
+  const clearChat = () => {
+    setMessages([]);
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
@@ -166,19 +171,32 @@ const CyberChat = () => {
               <p className="text-xs text-muted-foreground">Cybersecurity assistant & CTF mentor</p>
             </div>
           </div>
-          <Select value={provider} onValueChange={setProvider}>
-            <SelectTrigger className="w-[180px] bg-muted/50 border-border">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-card border-border">
-              <SelectItem value="lovable">
-                <span className="flex items-center gap-2"><Sparkles className="w-3 h-3" /> PHANTOM-7</span>
-              </SelectItem>
-              <SelectItem value="blackbox">
-                <span className="flex items-center gap-2"><Bot className="w-3 h-3" /> SPECTER-X</span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2">
+            {messages.length > 0 && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={clearChat}
+                className="text-muted-foreground hover:text-destructive"
+                title="Clear chat"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            )}
+            <Select value={provider} onValueChange={setProvider}>
+              <SelectTrigger className="w-[180px] bg-muted/50 border-border">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-card border-border">
+                <SelectItem value="lovable">
+                  <span className="flex items-center gap-2"><Sparkles className="w-3 h-3" /> PHANTOM-7</span>
+                </SelectItem>
+                <SelectItem value="blackbox">
+                  <span className="flex items-center gap-2"><Bot className="w-3 h-3" /> SPECTER-X</span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Chat Area */}
@@ -217,13 +235,17 @@ const CyberChat = () => {
                 </div>
               )}
               <div
-                className={`max-w-[80%] rounded-lg px-4 py-3 text-sm whitespace-pre-wrap ${
+                className={`max-w-[80%] rounded-lg px-4 py-3 text-sm ${
                   msg.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted/50 text-foreground border border-border'
+                    ? 'bg-primary text-primary-foreground whitespace-pre-wrap'
+                    : 'bg-muted/50 text-foreground border border-border prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2 prose-pre:bg-background prose-pre:border prose-pre:border-border prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:before:content-none prose-code:after:content-none'
                 }`}
               >
-                {msg.content}
+                {msg.role === 'assistant' ? (
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                ) : (
+                  msg.content
+                )}
               </div>
               {msg.role === 'user' && (
                 <div className="w-7 h-7 rounded-md bg-muted flex items-center justify-center flex-shrink-0 mt-1">
